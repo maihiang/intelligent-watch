@@ -25,3 +25,6 @@
 #JLINK file
 JLinkLog.txt
 *.dbgconf
+
+#ignore .vscode folder
+.vscode/
