@@ -18,6 +18,7 @@
 *.bin
 *.Bak
 *.sct
+*.scvd
 
 #Keil Project screen layout file
 *.uvguix.*
