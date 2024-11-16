@@ -15,6 +15,20 @@ mode可取0-5
 */
 int mode = 0;
 
+/*
+此处以一个数组定义一张彩色图片数据，10*10
+*/
+uint16_t picture_data[400];
+uint16_t color = ATK_MD0280_RED;
+void generate_picture_data(uint16_t color)
+{
+    for(int i = 0; i < 400; i++)
+    {
+        picture_data[i] = color;
+    }
+}
+
+
 /**
  * @brief       演示各个界面
  * @param       无
@@ -94,20 +108,16 @@ static void demo_show_ui(void)
             break;
         
         case 1:
-            atk_md0280_show_string(120, 160, ATK_MD0280_LCD_WIDTH, 32, "1", ATK_MD0280_LCD_FONT_32, ATK_MD0280_RED);
+            // atk_md0280_show_string(120, 160, ATK_MD0280_LCD_WIDTH, 32, "1", ATK_MD0280_LCD_FONT_32, ATK_MD0280_RED);
             atk_md0280_fill(10,10,40,30,ATK_MD0280_BLACK);
             atk_md0280_show_string(12, 15, ATK_MD0280_LCD_WIDTH, 12, "BACK", ATK_MD0280_LCD_FONT_12, ATK_MD0280_WHITE);
+            generate_picture_data(color);
+            atk_md0280_show_pic(40,40,20,20,picture_data);
 
-            atk_md0280_draw_line(1,152,1,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(1,167,32,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(32,167,32,152,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(32,152,1,152,ATK_MD0280_BLACK);
+            atk_md0280_draw_rect(1,152,32,167,ATK_MD0280_BLACK);
             atk_md0280_show_string(5, 149, ATK_MD0280_LCD_WIDTH, 16, "pre", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BLACK);
             
-            atk_md0280_draw_line(207,152,207,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(207,167,238,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(238,167,238,152,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(238,152,207,152,ATK_MD0280_BLACK);
+            atk_md0280_draw_rect(207,152,238,167,ATK_MD0280_BLACK);
             atk_md0280_show_string(211, 149, ATK_MD0280_LCD_WIDTH, 16, "nex", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BLACK);
             break;
 
@@ -116,18 +126,10 @@ static void demo_show_ui(void)
             atk_md0280_fill(10,10,40,30,ATK_MD0280_BLACK);
             atk_md0280_show_string(12, 15, ATK_MD0280_LCD_WIDTH, 12, "BACK", ATK_MD0280_LCD_FONT_12, ATK_MD0280_WHITE);
 
-            
-            atk_md0280_draw_line(1,152,1,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(1,167,32,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(32,167,32,152,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(32,152,1,152,ATK_MD0280_BLACK);
+            atk_md0280_draw_rect(1,152,32,167,ATK_MD0280_BLACK);
             atk_md0280_show_string(5, 149, ATK_MD0280_LCD_WIDTH, 16, "pre", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BLACK);
 
-
-            atk_md0280_draw_line(207,152,207,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(207,167,238,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(238,167,238,152,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(238,152,207,152,ATK_MD0280_BLACK);
+            atk_md0280_draw_rect(207,152,238,167,ATK_MD0280_BLACK);
             atk_md0280_show_string(211, 149, ATK_MD0280_LCD_WIDTH, 16, "nex", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BLACK);
             break;
             
@@ -136,17 +138,10 @@ static void demo_show_ui(void)
             atk_md0280_fill(10,10,40,30,ATK_MD0280_BLACK);
             atk_md0280_show_string(12, 15, ATK_MD0280_LCD_WIDTH, 12, "BACK", ATK_MD0280_LCD_FONT_12, ATK_MD0280_WHITE);
             
-            atk_md0280_draw_line(1,152,1,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(1,167,32,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(32,167,32,152,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(32,152,1,152,ATK_MD0280_BLACK);
+            atk_md0280_draw_rect(1,152,32,167,ATK_MD0280_BLACK);
             atk_md0280_show_string(5, 149, ATK_MD0280_LCD_WIDTH, 16, "pre", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BLACK);
 
-
-            atk_md0280_draw_line(207,152,207,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(207,167,238,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(238,167,238,152,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(238,152,207,152,ATK_MD0280_BLACK);
+            atk_md0280_draw_rect(207,152,238,167,ATK_MD0280_BLACK);
             atk_md0280_show_string(211, 149, ATK_MD0280_LCD_WIDTH, 16, "nex", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BLACK);
             break;
 
@@ -155,17 +150,10 @@ static void demo_show_ui(void)
             atk_md0280_fill(10,10,40,30,ATK_MD0280_BLACK);
             atk_md0280_show_string(12, 15, ATK_MD0280_LCD_WIDTH, 12, "BACK", ATK_MD0280_LCD_FONT_12, ATK_MD0280_WHITE);
             
-            atk_md0280_draw_line(1,152,1,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(1,167,32,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(32,167,32,152,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(32,152,1,152,ATK_MD0280_BLACK);
+            atk_md0280_draw_rect(1,152,32,167,ATK_MD0280_BLACK);
             atk_md0280_show_string(5, 149, ATK_MD0280_LCD_WIDTH, 16, "pre", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BLACK);
 
-
-            atk_md0280_draw_line(207,152,207,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(207,167,238,167,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(238,167,238,152,ATK_MD0280_BLACK);
-            atk_md0280_draw_line(238,152,207,152,ATK_MD0280_BLACK);
+            atk_md0280_draw_rect(207,152,238,167,ATK_MD0280_BLACK);
             atk_md0280_show_string(211, 149, ATK_MD0280_LCD_WIDTH, 16, "nex", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BLACK);
             break;
     }

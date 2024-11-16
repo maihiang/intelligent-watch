@@ -1191,7 +1191,7 @@ void atk_md0280_show_num(uint16_t x, uint16_t y, uint32_t num, uint8_t len, atk_
  *              pic   : 待显示图片数组首地址
  * @retval      无
  */
-void atk_md0280_show_pic(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t *pic)
+void atk_md0280_show_pic(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t *pic)
 {
     uint16_t x_index;
     uint16_t y_index;
@@ -1204,9 +1204,9 @@ void atk_md0280_show_pic(uint16_t x, uint16_t y, uint16_t width, uint16_t height
     atk_md0280_set_column_address(x, x + width - 1);
     atk_md0280_set_page_address(y, y + height - 1);
     atk_md0280_start_write_memory();
-    for (y_index=y; y_index<=(y + height); y_index++)
+    for (y_index=y; y_index<(y + height); y_index++)
     {
-        for (x_index=x; x_index<=(x + width); x_index++)
+        for (x_index=x; x_index<(x + width); x_index++)
         {
             atk_md0280_fsmc_write_dat(*pic);
             pic++;
