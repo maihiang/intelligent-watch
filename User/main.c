@@ -24,6 +24,7 @@
 #include "./BSP/LED/led.h"
 #include "./BSP/KEY/key.h"
 #include "demo.h"
+#include "./BSP/TIMER/btim.h"
 
 /**
  * @brief       显示实验信息
@@ -50,6 +51,7 @@ int main(void)
     usart_init(115200);                 /* 串口初始化为115200 */
     led_init();                         /* 初始化LED */
     key_init();                         /* 初始化按键 */
+    btim_timx_int_init(10000 - 1, 7200 - 1); /* 初始化定时器，10kHz的技术频率，计数10000次为1s */
     show_mesg();                        /* 显示实验信息 */
     demo_run();                         /* 运行示例程序 */
 }

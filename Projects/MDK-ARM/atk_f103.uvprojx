@@ -382,16 +382,6 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>Startup</GroupName>
-          <Files>
-            <File>
-              <FileName>startup_stm32f103xe.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\Drivers\CMSIS\Device\ST\STM32F1xx\Source\Templates\arm\startup_stm32f103xe.s</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>User</GroupName>
           <Files>
             <File>
@@ -414,6 +404,56 @@
               <FileType>1</FileType>
               <FilePath>..\..\User\demo.c</FilePath>
             </File>
+            <File>
+              <FileName>displaymode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\displaymode.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Drivers/BSP</GroupName>
+          <Files>
+            <File>
+              <FileName>led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\BSP\LED\led.c</FilePath>
+            </File>
+            <File>
+              <FileName>key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\BSP\KEY\key.c</FilePath>
+            </File>
+            <File>
+              <FileName>dht11.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\BSP\DHT11\dht11.c</FilePath>
+            </File>
+            <File>
+              <FileName>atk_md0280.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\BSP\ATK_MD0280\atk_md0280.c</FilePath>
+            </File>
+            <File>
+              <FileName>atk_md0280_fsmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\BSP\ATK_MD0280\atk_md0280_fsmc.c</FilePath>
+            </File>
+            <File>
+              <FileName>atk_md0280_touch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\BSP\ATK_MD0280\atk_md0280_touch.c</FilePath>
+            </File>
+            <File>
+              <FileName>atk_md0280_touch_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\BSP\ATK_MD0280\atk_md0280_touch_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>btim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\BSP\TIMER\btim.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -433,6 +473,11 @@
               <FileName>usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Drivers\SYSTEM\usart\usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>date.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\SYSTEM\date\date.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -512,47 +557,22 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Drivers/BSP</GroupName>
-          <Files>
-            <File>
-              <FileName>led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\BSP\LED\led.c</FilePath>
-            </File>
-            <File>
-              <FileName>key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\BSP\KEY\key.c</FilePath>
-            </File>
-            <File>
-              <FileName>atk_md0280.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\BSP\ATK_MD0280\atk_md0280.c</FilePath>
-            </File>
-            <File>
-              <FileName>atk_md0280_fsmc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\BSP\ATK_MD0280\atk_md0280_fsmc.c</FilePath>
-            </File>
-            <File>
-              <FileName>atk_md0280_touch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\BSP\ATK_MD0280\atk_md0280_touch.c</FilePath>
-            </File>
-            <File>
-              <FileName>atk_md0280_touch_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\BSP\ATK_MD0280\atk_md0280_touch_spi.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>Readme</GroupName>
           <Files>
             <File>
               <FileName>readme.txt</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\readme.txt</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Startup</GroupName>
+          <Files>
+            <File>
+              <FileName>startup_stm32f103xe.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\Drivers\CMSIS\Device\ST\STM32F1xx\Source\Templates\arm\startup_stm32f103xe.s</FilePath>
             </File>
           </Files>
         </Group>
