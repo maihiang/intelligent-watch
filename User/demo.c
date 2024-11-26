@@ -15,7 +15,7 @@ mode可取0-5
 0代表主菜单，1代表显示1，2代表显示2，etc
 */
 int mode = 0;
-uint16_t year = 2024, month = 11, day = 25, hour = 11, minute = 45, second = 14;
+uint16_t year = 2024, month = 12, day = 25, hour = 23, minute = 59, second = 50;
 
 /**
  * @brief       演示各个界面
@@ -28,29 +28,17 @@ static void demo_show_ui(void)
     uint16_t y_scan;
 
     //以下进行扫描，并在合适的时候进行模式切换
-    if (atk_md0280_touch_scan(&x_scan, &y_scan) == 0)//在该周期内，触摸屏有触摸，进行相应操作
+    if (atk_md0280_touch_scan(&x_scan, &y_scan) == 0)//在该周期内，触摸屏有触摸，进行相应操作，否则mode不变；同时在切换mode时清屏
     {
         if(mode == 0)
         {
-            if ((x_scan >= 0) && (x_scan <= 109) && (y_scan >= 0 ) && (y_scan <= 149))
-            {
-                mode = 1;
-                atk_md0280_clear(ATK_MD0280_WHITE);
-            }
-
-            if ((x_scan >= 130) && (x_scan <= 239) && (y_scan >= 0 ) && (y_scan <= 149))
-            {
-                mode = 2;
-                atk_md0280_clear(ATK_MD0280_WHITE);
-            }
-
-            if ((x_scan >= 0) && (x_scan <= 109) && (y_scan >= 170 ) && (y_scan <= 319))
+           if ((x_scan >= 0) && (x_scan <= 50) && (y_scan >= 269) && (y_scan <= 319))
             {
                 mode = 3;
                 atk_md0280_clear(ATK_MD0280_WHITE);
             }
 
-            if ((x_scan >= 130) && (x_scan <= 239) && (y_scan >= 170 ) && (y_scan <= 319))
+            if ((x_scan >= 189) && (x_scan <= 239) && (y_scan >= 269) && (y_scan <= 319))
             {
                 mode = 4;
                 atk_md0280_clear(ATK_MD0280_WHITE);
@@ -62,7 +50,7 @@ static void demo_show_ui(void)
             if ((x_scan >= 10)&&(x_scan <= 40)&&(y_scan >= 10)&&(y_scan <= 30))
             {
                 mode = 0;
-                atk_md0280_clear(ATK_MD0280_WHITE);
+                atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
             if ((x_scan >= 1)&&(x_scan <= 32)&&(y_scan >= 152)&&(y_scan <= 167))
@@ -83,11 +71,11 @@ static void demo_show_ui(void)
         
     }
 
-    //以下根据mode的值进行显示，每10ms刷新一次
+    //以下根据mode的值进行显示，每10ms刷新一次，显示的函数写在了displaymode.c中
     switch(mode)
     {
         case 0:
-            display_mode_0();
+            display_main();
             break;
         
         case 1:
@@ -130,14 +118,14 @@ void demo_run(void)
     }
     
     /* ATK-MD0280模块LCD清屏 */
-    atk_md0280_clear(ATK_MD0280_WHITE);
+    atk_md0280_clear(ATK_MD0280_BLACK);
 
     /* 初始化日期 */
-    year = 2024, month = 11, day = 25, hour = 11, minute = 45, second = 14;
-    
+    year = 2011, month = 4, day = 5, hour = 14, minute = 19, second = 19;
+
     while (1)
     {
-        /* 演示立方体3D旋转 */
+        /* 进行页面刷新显示，显示完成后延时0.1秒，预计每秒刷新10次 */
         demo_show_ui();
         delay_ms(100);
     }
