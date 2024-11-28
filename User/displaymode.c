@@ -125,11 +125,11 @@ void display_setting(void)
 }
 
 /*
-以下函数的功能是在屏幕上显示设置日期界面
+以下函数的功能是在屏幕上显示设置年份界面
 */
-void display_setting_date(void)
+void display_setting_year(void)
 {
-    static uint16_t year_set_tmp, month_set_tmp, day_set_tmp, hour_set_tmp, minute_set_tmp, second_set_tmp;
+    static uint16_t year_set_tmp;
 
     //左上角返回按钮
     atk_md0280_show_pic(5, 5, 50, 40, back_logo);
@@ -137,9 +137,12 @@ void display_setting_date(void)
     //如果日期发生变化，清除原来的日期
     if(year_set_tmp != year_set)
     {
-        atk_md0280_fill(90, 145, 154, 177, ATK_MD0280_BLACK);
+        atk_md0280_fill(88, 145, 152, 177, ATK_MD0280_BLACK);
         year_set_tmp = year_set;
     }
+    //切换成月份设置界面
+    atk_md0280_draw_rect(179, 80, 229, 180,ATK_MD0280_WHITE);
+    atk_md0280_show_string(189, 85, ATK_MD0280_LCD_WIDTH, 16, "month", ATK_MD0280_LCD_FONT_16, ATK_MD0280_WHITE);
     //年份-1
     atk_md0280_draw_rect(20, 200, 110, 270,ATK_MD0280_WHITE);
     atk_md0280_show_char(55, 220, '-', ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
@@ -150,5 +153,72 @@ void display_setting_date(void)
     atk_md0280_draw_rect(20, 270, 220, 310,ATK_MD0280_WHITE);
     atk_md0280_show_string(100, 275, ATK_MD0280_LCD_WIDTH, 32, "OK", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
     //显示进入设置年份界面一瞬间的年份
-    atk_md0280_show_xnum(90,145,year_set,4,ATK_MD0280_NUM_SHOW_ZERO,ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
+    atk_md0280_show_xnum(88,145,year_set,4,ATK_MD0280_NUM_SHOW_ZERO,ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
+}
+
+/*
+以下函数的功能是在屏幕上显示设置月份界面
+*/
+void display_setting_month(void)
+{
+    static uint16_t month_set_tmp;
+
+    //左上角返回按钮
+    atk_md0280_show_pic(5, 5, 50, 40, back_logo);
+
+    //如果日期发生变化，清除原来的日期
+    if(month_set_tmp != month_set)
+    {
+        atk_md0280_fill(88, 145, 152, 177, ATK_MD0280_BLACK);
+        month_set_tmp = month_set;
+    }
+    //切换成年份设置界面
+    atk_md0280_draw_rect(10, 80, 60, 180,ATK_MD0280_WHITE);
+    atk_md0280_show_string(20, 85, ATK_MD0280_LCD_WIDTH, 16, "year", ATK_MD0280_LCD_FONT_16, ATK_MD0280_WHITE);
+    //切换成日期设置界面
+    atk_md0280_draw_rect(179, 80, 229, 180,ATK_MD0280_WHITE);
+    atk_md0280_show_string(189, 85, ATK_MD0280_LCD_WIDTH, 16, "day", ATK_MD0280_LCD_FONT_16, ATK_MD0280_WHITE);
+    //月份-1
+    atk_md0280_draw_rect(20, 200, 110, 270,ATK_MD0280_WHITE);
+    atk_md0280_show_char(55, 220, '-', ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //月份+1
+    atk_md0280_draw_rect(130, 200, 220, 270,ATK_MD0280_WHITE);
+    atk_md0280_show_char(165, 220, '+', ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //确认按钮
+    atk_md0280_draw_rect(20, 270, 220, 310,ATK_MD0280_WHITE);
+    atk_md0280_show_string(100, 275, ATK_MD0280_LCD_WIDTH, 32, "OK", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //显示进入设置月份界面一瞬间的月份
+    atk_md0280_show_xnum(104,145,month_set,2,ATK_MD0280_NUM_SHOW_ZERO,ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
+}
+
+/*
+以下函数的功能是在屏幕上显示设置日期界面
+*/
+void display_setting_day(void)
+{
+    static uint16_t day_set_tmp;
+
+    //左上角返回按钮
+    atk_md0280_show_pic(5, 5, 50, 40, back_logo);
+
+    //如果日期发生变化，清除原来的日期
+    if(day_set_tmp != day_set)
+    {
+        atk_md0280_fill(88, 145, 152, 177, ATK_MD0280_BLACK);
+        day_set_tmp = day_set;
+    }
+    //切换成月份设置界面
+    atk_md0280_draw_rect(10, 80, 60, 180,ATK_MD0280_WHITE);
+    atk_md0280_show_string(20, 85, ATK_MD0280_LCD_WIDTH, 16, "month", ATK_MD0280_LCD_FONT_16, ATK_MD0280_WHITE);
+    //日期-1
+    atk_md0280_draw_rect(20, 200, 110, 270,ATK_MD0280_WHITE);
+    atk_md0280_show_char(55, 220, '-', ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //日期+1
+    atk_md0280_draw_rect(130, 200, 220, 270,ATK_MD0280_WHITE);
+    atk_md0280_show_char(165, 220, '+', ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //确认按钮
+    atk_md0280_draw_rect(20, 270, 220, 310,ATK_MD0280_WHITE);
+    atk_md0280_show_string(100, 275, ATK_MD0280_LCD_WIDTH, 32, "OK", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //显示进入设置日期界面一瞬间的日期
+    atk_md0280_show_xnum(104,145,day_set,2,ATK_MD0280_NUM_SHOW_ZERO,ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
 }

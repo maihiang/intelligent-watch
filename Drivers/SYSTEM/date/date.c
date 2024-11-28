@@ -41,5 +41,9 @@ void updateTime(uint16_t *year, uint16_t *month, uint16_t *day, uint16_t *hour, 
             }
         }
     }
+    if(*day > daysInMonth(*year, *month)) 
+    {
+        *day = daysInMonth(*year, *month);
+    }
 }
 

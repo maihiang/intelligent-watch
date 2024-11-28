@@ -6,6 +6,7 @@
 #include "./SYSTEM/delay/delay.h"
 #include <math.h>
 #include "displaymode.h"
+#include "./SYSTEM/date/date.h"
 
 #define PI (float)(3.1415926)
 
@@ -15,6 +16,7 @@ mode可取0-5
 0代表主菜单，1代表显示1，2代表显示2，etc
 */
 int mode = 0;
+int next_mode = 0;
 //定义全局变量，表示日期时间
 uint16_t year = 2024, month = 12, day = 25, hour = 23, minute = 59, second = 50;
 //定义全局变量，表示设置界面中的日期和时间
@@ -40,14 +42,14 @@ static void demo_show_ui(void)
             /*左下角的按钮，按下去后进入选择各个功能的界面*/
             if ((x_scan >= 0) && (x_scan <= 50) && (y_scan >= 269) && (y_scan <= 319))
             {
-                mode = 1;
+                next_mode = 1;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
             /*右下角的按钮，按下去后进入设置界面*/
             if ((x_scan >= 189) && (x_scan <= 239) && (y_scan >= 269) && (y_scan <= 319))
             {
-                mode = 2;
+                next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
         }
@@ -57,7 +59,7 @@ static void demo_show_ui(void)
         {
             if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
             {
-                mode = 0;
+                next_mode = 0;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
         }
@@ -67,66 +69,201 @@ static void demo_show_ui(void)
             //返回按钮相应
             if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
             {
-                mode = 0;
+                next_mode = 0;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
             //日期设置按钮相应
             if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 130)&&(y_scan <= 270))
             {
-                mode = 21;
+                next_mode = 21;
                 year_set = year;
+                month_set = month;
+                day_set = day;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
         }
-        //设置日期界面的操作
+
+        //设置年份界面的操作
         if(mode == 21)
         {
             //返回按钮相应
             if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
             {
-                mode = 2;
+                next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
-            }
-
-            //年份-1
-            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 200)&&(y_scan <= 270))
-            {
-                year_set -= 1;
-            }
-
-            //年份+1
-            if ((x_scan >= 130)&&(x_scan <= 220)&&(y_scan >= 200)&&(y_scan <= 270))
-            {
-                year_set += 1;
             }
 
             //年份确认
             if ((x_scan >= 20)&&(x_scan <= 220)&&(y_scan >= 270)&&(y_scan <= 310))
             {
                 year = year_set;
-                mode = 2;
+                next_mode = 2;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+
+            //年份-1
+            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 200)&&(y_scan <= 270))
+            {
+                if(year_set > 1980)
+                {
+                    year_set -= 1;
+                }
+            }
+
+            //年份+1
+            if ((x_scan >= 130)&&(x_scan <= 220)&&(y_scan >= 200)&&(y_scan <= 270))
+            {
+                if(year_set < 9999)
+                {
+                    year_set += 1;
+                }
+            }
+
+            //切换成月份设置界面
+            if ((x_scan >= 189)&&(x_scan <= 239)&&(y_scan >= 80)&&(y_scan <= 180))
+            {
+                next_mode = 22;
+                month_set = month;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+        }
+
+        //设置月份界面的操作
+        if(mode == 22)
+        {
+            //返回按钮相应
+            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
+            {
+                next_mode = 2;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+
+            //月份确认
+            if ((x_scan >= 20)&&(x_scan <= 220)&&(y_scan >= 270)&&(y_scan <= 310))
+            {
+                month = month_set;
+                next_mode = 2;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+
+            //月份-1
+            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 200)&&(y_scan <= 270))
+            {
+                month_set -= 1;
+                if(month_set <= 0)
+                {
+                    month_set = 12;
+                }
+            }
+
+            //月份+1
+            if ((x_scan >= 130)&&(x_scan <= 220)&&(y_scan >= 200)&&(y_scan <= 270))
+            {
+                month_set += 1;
+                if(month_set >= 13)
+                {
+                    month_set = 1;
+                }
+            }
+
+            //切换成日期设置界面
+            if ((x_scan >= 189)&&(x_scan <= 239)&&(y_scan >= 80)&&(y_scan <= 180))
+            {
+                next_mode = 23;
+                day_set = day;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+
+            //切换成年份设置界面
+            if ((x_scan >= 0)&&(x_scan <= 50)&&(y_scan >= 80)&&(y_scan <= 180))
+            {
+                next_mode = 21;
+                year_set = year;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+        }
+
+        //设置日期界面的操作
+        if(mode == 23)
+        {
+            //返回按钮相应
+            if ((x_scan >= 0)&&(x_scan <= 50)&&(y_scan >= 0)&&(y_scan <= 50))
+            {
+                next_mode = 2;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+
+            //日期确认
+            if ((x_scan >= 20)&&(x_scan <= 220)&&(y_scan >= 270)&&(y_scan <= 310))
+            {
+                day = day_set;
+                next_mode = 2;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+
+            //日期-1
+            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 200)&&(y_scan <= 270))
+            {
+                day_set -= 1;
+                if (day_set <= 0)
+                {
+                    day_set = daysInMonth(year, month);
+                }
+            }
+
+            //日期+1
+            if ((x_scan >= 130)&&(x_scan <= 220)&&(y_scan >= 200)&&(y_scan <= 270))
+            {
+                day_set += 1;
+                if (day_set > daysInMonth(year, month))
+                {
+                    day_set = 1;
+                }
+            }
+
+            //切换成月份设置界面
+            if ((x_scan >= 0)&&(x_scan <= 50)&&(y_scan >= 80)&&(y_scan <= 180))
+            {
+                next_mode = 22;
+                month_set = month;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
         }
     }
 
+    mode = next_mode;
+
     //以下根据mode的值进行显示，每10ms刷新一次，显示的函数写在了displaymode.c中
     switch(mode)
     {
+        //显示主界面
         case 0:
             display_main();
             break;
         
+        //显示应用菜单
         case 1:
             display_menu(); 
             break;
 
+        //显示设置界面
         case 2:
             display_setting();
             break;
         
+        //显示设置年份界面
         case 21:
-            display_setting_date();
+            display_setting_year();
+            break;
+        
+        //显示设置月份界面
+        case 22:
+            display_setting_month();
+            break;
+        
+        //显示设置日期界面
+        case 23:
+            display_setting_day();
             break;
             
         case 3:
@@ -162,7 +299,7 @@ void demo_run(void)
     atk_md0280_clear(ATK_MD0280_BLACK);
 
     /* 初始化日期 */
-    year = 2024, month = 12, day = 31, hour = 23, minute = 59, second = 55;
+    year = 2024, month = 12, day = 31, hour = 23, minute = 59, second = 40;
 
     while (1)
     {
