@@ -81,6 +81,15 @@ static void demo_show_ui(void)
                 day_set = day;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
+            //时间设置按钮相应
+            if ((x_scan >= 129)&&(x_scan <= 219)&&(y_scan >= 130)&&(y_scan <= 270))
+            {
+                next_mode = 24;
+                hour_set = hour;
+                minute_set = minute;
+                second_set = second;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
         }
 
         //设置年份界面的操作
@@ -120,7 +129,7 @@ static void demo_show_ui(void)
             }
 
             //切换成月份设置界面
-            if ((x_scan >= 189)&&(x_scan <= 239)&&(y_scan >= 80)&&(y_scan <= 180))
+            if ((x_scan >= 179)&&(x_scan <= 239)&&(y_scan >= 80)&&(y_scan <= 180))
             {
                 next_mode = 22;
                 month_set = month;
@@ -167,7 +176,7 @@ static void demo_show_ui(void)
             }
 
             //切换成日期设置界面
-            if ((x_scan >= 189)&&(x_scan <= 239)&&(y_scan >= 80)&&(y_scan <= 180))
+            if ((x_scan >= 179)&&(x_scan <= 239)&&(y_scan >= 80)&&(y_scan <= 180))
             {
                 next_mode = 23;
                 day_set = day;
@@ -175,7 +184,7 @@ static void demo_show_ui(void)
             }
 
             //切换成年份设置界面
-            if ((x_scan >= 0)&&(x_scan <= 50)&&(y_scan >= 80)&&(y_scan <= 180))
+            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 80)&&(y_scan <= 180))
             {
                 next_mode = 21;
                 year_set = year;
@@ -187,7 +196,7 @@ static void demo_show_ui(void)
         if(mode == 23)
         {
             //返回按钮相应
-            if ((x_scan >= 0)&&(x_scan <= 50)&&(y_scan >= 0)&&(y_scan <= 50))
+            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
             {
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
@@ -222,10 +231,168 @@ static void demo_show_ui(void)
             }
 
             //切换成月份设置界面
-            if ((x_scan >= 0)&&(x_scan <= 50)&&(y_scan >= 80)&&(y_scan <= 180))
+            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 80)&&(y_scan <= 180))
             {
                 next_mode = 22;
                 month_set = month;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+        }
+    
+        //设置小时界面的操作
+        if(mode == 24)
+        {
+            //返回按钮相应
+            if ((x_scan >= 0)&&(x_scan <= 50)&&(y_scan >= 0)&&(y_scan <= 50))
+            {
+                next_mode = 2;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+
+            //时间确认
+            if ((x_scan >= 20)&&(x_scan <= 220)&&(y_scan >= 270)&&(y_scan <= 310))
+            {
+                hour = hour_set;
+                next_mode = 2;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+
+            //小时-1
+            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 200)&&(y_scan <= 270))
+            {
+                if(hour_set <= 0 || hour_set > 23)
+                {
+                    hour_set = 23;
+                }
+                else
+                {
+                    hour_set -= 1;
+                }
+            }
+
+            //小时+1
+            if ((x_scan >= 130)&&(x_scan <= 220)&&(y_scan >= 200)&&(y_scan <= 270))
+            {
+                hour_set += 1;
+                if (hour_set > 23)
+                {
+                    hour_set = 0;
+                }
+            }
+
+            //切换成分钟设置界面
+            if ((x_scan >= 179)&&(x_scan <= 239)&&(y_scan >= 80)&&(y_scan <= 180))
+            {
+                next_mode = 25;
+                minute_set = minute;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+        }
+
+        //设置分钟界面的操作
+        if(mode == 25)
+        {
+            //返回按钮相应
+            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
+            {
+                next_mode = 2;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+
+            //分钟确认
+            if ((x_scan >= 20)&&(x_scan <= 220)&&(y_scan >= 270)&&(y_scan <= 310))
+            {
+                minute = minute_set;
+                next_mode = 2;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+
+            //分钟-1
+            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 200)&&(y_scan <= 270))
+            {
+                if (minute_set <= 0 || minute_set > 59)
+                {
+                    minute_set = 59;
+                }
+                else
+                {
+                    minute_set -= 1;
+                }
+            }
+
+            //分钟+1
+            if ((x_scan >= 130)&&(x_scan <= 220)&&(y_scan >= 200)&&(y_scan <= 270))
+            {
+                minute_set += 1;
+                if (minute_set > 59)
+                {
+                    minute_set = 0;
+                }
+            }
+
+            //切换成小时设置界面
+            if ((x_scan >= 0)&&(x_scan <= 50)&&(y_scan >= 80)&&(y_scan <= 180))
+            {
+                next_mode = 24;
+                hour_set = hour;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+
+            //切换成秒设置界面
+            if ((x_scan >= 189)&&(x_scan <= 239)&&(y_scan >= 80)&&(y_scan <= 180))
+            {
+                next_mode = 26;
+                second_set = second;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+        }
+
+        //设置秒界面的操作
+        if(mode == 26)
+        {
+            //返回按钮相应
+            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
+            {
+                next_mode = 2;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+
+            //秒确认
+            if ((x_scan >= 20)&&(x_scan <= 220)&&(y_scan >= 270)&&(y_scan <= 310))
+            {
+                second = second_set;
+                next_mode = 2;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+
+            //秒-1
+            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 200)&&(y_scan <= 270))
+            {
+                if (second_set <= 0 || second_set > 59)
+                {
+                    second_set = 59;
+                }
+                else
+                {
+                    second_set -= 1;
+                }
+            }
+
+            //秒+1
+            if ((x_scan >= 130)&&(x_scan <= 220)&&(y_scan >= 200)&&(y_scan <= 270))
+            {
+                second_set += 1;
+                if (second_set > 59)
+                {
+                    second_set = 0;
+                }
+            }
+
+            //切换成分钟设置界面
+            if ((x_scan >= 0)&&(x_scan <= 50)&&(y_scan >= 80)&&(y_scan <= 180))
+            {
+                next_mode = 25;
+                minute_set = minute;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
         }
@@ -264,6 +431,21 @@ static void demo_show_ui(void)
         //显示设置日期界面
         case 23:
             display_setting_day();
+            break;
+        
+        //显示设置小时界面
+        case 24:
+            display_setting_hour();
+            break;
+        
+        //显示设置分钟界面
+        case 25:
+            display_setting_minute();
+            break;
+        
+        //显示设置秒界面
+        case 26:
+            display_setting_second();
             break;
             
         case 3:

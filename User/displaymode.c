@@ -122,6 +122,9 @@ void display_setting(void)
     //在屏幕上显示设置日期按钮
     atk_md0280_draw_rect(20,130,110,270,ATK_MD0280_WHITE);
     atk_md0280_show_string(35,175,ATK_MD0280_LCD_WIDTH,32,"date",ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
+    //在屏幕上显示设置时间按钮
+    atk_md0280_draw_rect(129,130,219,270,ATK_MD0280_WHITE);
+    atk_md0280_show_string(144,175,ATK_MD0280_LCD_WIDTH,32,"time",ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
 }
 
 /*
@@ -221,4 +224,103 @@ void display_setting_day(void)
     atk_md0280_show_string(100, 275, ATK_MD0280_LCD_WIDTH, 32, "OK", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
     //显示进入设置日期界面一瞬间的日期
     atk_md0280_show_xnum(104,145,day_set,2,ATK_MD0280_NUM_SHOW_ZERO,ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
+}
+
+/*
+以下函数的功能是在屏幕上显示设置小时界面
+*/
+void display_setting_hour(void)
+{
+    static uint16_t hour_set_tmp;
+
+    //左上角返回按钮
+    atk_md0280_show_pic(5, 5, 50, 40, back_logo);
+
+    //如果小时发生变化，清除原来的小时
+    if(hour_set_tmp != hour_set)
+    {
+        atk_md0280_fill(88, 145, 152, 177, ATK_MD0280_BLACK);
+        hour_set_tmp = hour_set;
+    }
+    //切换成分钟设置界面
+    atk_md0280_draw_rect(179, 80, 229, 180,ATK_MD0280_WHITE);
+    atk_md0280_show_string(189, 85, ATK_MD0280_LCD_WIDTH, 16, "minute", ATK_MD0280_LCD_FONT_16, ATK_MD0280_WHITE);
+    //小时-1
+    atk_md0280_draw_rect(20, 200, 110, 270,ATK_MD0280_WHITE);
+    atk_md0280_show_char(55, 220, '-', ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //小时+1
+    atk_md0280_draw_rect(130, 200, 220, 270,ATK_MD0280_WHITE);
+    atk_md0280_show_char(165, 220, '+', ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //确认按钮
+    atk_md0280_draw_rect(20, 270, 220, 310,ATK_MD0280_WHITE);
+    atk_md0280_show_string(100, 275, ATK_MD0280_LCD_WIDTH, 32, "OK", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //显示进入设置小时界面一瞬间的小时
+    atk_md0280_show_xnum(104,145,hour_set,2,ATK_MD0280_NUM_SHOW_ZERO,ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
+}
+
+/*
+以下函数的功能是在屏幕上显示设置分钟界面
+*/
+void display_setting_minute(void)
+{
+    static uint16_t minute_set_tmp;
+
+    //左上角返回按钮
+    atk_md0280_show_pic(5, 5, 50, 40, back_logo);
+
+    //如果分钟发生变化，清除原来的分钟
+    if(minute_set_tmp != minute_set)
+    {
+        atk_md0280_fill(88, 145, 152, 177, ATK_MD0280_BLACK);
+        minute_set_tmp = minute_set;
+    }
+    //切换成秒设置界面
+    atk_md0280_draw_rect(179, 80, 229, 180,ATK_MD0280_WHITE);
+    atk_md0280_show_string(189, 85, ATK_MD0280_LCD_WIDTH, 16, "second", ATK_MD0280_LCD_FONT_16, ATK_MD0280_WHITE);
+    //切换成小时设置界面
+    atk_md0280_draw_rect(10, 80, 60, 180,ATK_MD0280_WHITE);
+    atk_md0280_show_string(20, 85, ATK_MD0280_LCD_WIDTH, 16, "hour", ATK_MD0280_LCD_FONT_16, ATK_MD0280_WHITE);
+    //分钟-1
+    atk_md0280_draw_rect(20, 200, 110, 270,ATK_MD0280_WHITE);
+    atk_md0280_show_char(55, 220, '-', ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //分钟+1
+    atk_md0280_draw_rect(130, 200, 220, 270,ATK_MD0280_WHITE);
+    atk_md0280_show_char(165, 220, '+', ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //确认按钮
+    atk_md0280_draw_rect(20, 270, 220, 310,ATK_MD0280_WHITE);
+    atk_md0280_show_string(100, 275, ATK_MD0280_LCD_WIDTH, 32, "OK", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //显示进入设置分钟界面一瞬间的分钟
+    atk_md0280_show_xnum(104,145,minute_set,2,ATK_MD0280_NUM_SHOW_ZERO,ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
+}
+
+/*
+以下函数的功能是在屏幕上显示设置秒界面
+*/
+void display_setting_second(void)
+{
+    static uint16_t second_set_tmp;
+
+    //左上角返回按钮
+    atk_md0280_show_pic(5, 5, 50, 40, back_logo);
+
+    //如果秒发生变化，清除原来的秒
+    if(second_set_tmp != second_set)
+    {
+        atk_md0280_fill(88, 145, 152, 177, ATK_MD0280_BLACK);
+        second_set_tmp = second_set;
+    }
+    //切换成分钟设置界面
+    atk_md0280_draw_rect(10, 80, 60, 180,ATK_MD0280_WHITE);
+    atk_md0280_show_string(20, 85, ATK_MD0280_LCD_WIDTH, 16, "minute", ATK_MD0280_LCD_FONT_16, ATK_MD0280_WHITE);
+    //秒-1
+    atk_md0280_draw_rect(20, 200, 110, 270,ATK_MD0280_WHITE);
+    atk_md0280_show_char(55, 220, '-', ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //秒+1
+    atk_md0280_draw_rect(130, 200, 220, 270,ATK_MD0280_WHITE);
+    atk_md0280_show_char(165, 220, '+', ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //确认按钮
+    atk_md0280_draw_rect(20, 270, 220, 310,ATK_MD0280_WHITE);
+    atk_md0280_show_string(100, 275, ATK_MD0280_LCD_WIDTH, 32, "OK", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    //显示进入设置秒界面一瞬间的秒
+    atk_md0280_show_xnum(104,145,second_set,2,ATK_MD0280_NUM_SHOW_ZERO,ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
 }
