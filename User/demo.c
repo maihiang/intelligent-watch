@@ -57,12 +57,31 @@ static void demo_show_ui(void)
         //应用菜单的操作
         if(mode == 1)
         {
+            //返回按钮相应
             if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
             {
                 next_mode = 0;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
+            //DHT11按钮相应
+            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 130)&&(y_scan <= 270))
+            {
+                next_mode = 11;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
         }
+        
+        //应用1：DHT11温湿度传感器
+        if(mode == 11)
+        {
+            //返回按钮相应
+            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
+            {
+                next_mode = 1;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+        }
+
         //设置界面的操作
         if(mode == 2)
         {
@@ -411,6 +430,11 @@ static void demo_show_ui(void)
         //显示应用菜单
         case 1:
             display_menu(); 
+            break;
+
+        //显示DHT11界面
+        case 11:
+            display_DHT11();
             break;
 
         //显示设置界面

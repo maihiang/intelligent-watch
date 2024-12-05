@@ -425,11 +425,6 @@
               <FilePath>..\..\Drivers\BSP\KEY\key.c</FilePath>
             </File>
             <File>
-              <FileName>dht11.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\BSP\DHT11\dht11.c</FilePath>
-            </File>
-            <File>
               <FileName>atk_md0280.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Drivers\BSP\ATK_MD0280\atk_md0280.c</FilePath>
@@ -453,6 +448,11 @@
               <FileName>btim.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Drivers\BSP\TIMER\btim.c</FilePath>
+            </File>
+            <File>
+              <FileName>dht11.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\BSP\DHT11\dht11.c</FilePath>
             </File>
           </Files>
         </Group>

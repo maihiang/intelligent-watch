@@ -1,6 +1,7 @@
 #include "demo.h"
 #include "./BSP/ATK_MD0280/atk_md0280.h"
 #include "./BSP/led/led.h"
+#include "./BSP/DHT11/dht11.h"
 #include "./SYSTEM/usart/usart.h"
 #include "./SYSTEM/delay/delay.h"
 #include "displaymode.h"
@@ -109,6 +110,31 @@ void display_menu(void)
 {
     atk_md0280_show_pic(5, 5, 50, 40, back_logo);
     draw_menu_logo(95, 60);
+    //在屏幕上显示DHT11功能按钮
+    atk_md0280_draw_rect(20,130,110,270,ATK_MD0280_WHITE);
+    atk_md0280_show_string(35,175,ATK_MD0280_LCD_WIDTH,32,"DHT11",ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
+}
+
+/*
+以下函数的功能是在屏幕上显示DHT11界面
+*/
+void display_DHT11(void)
+{
+    //定义DHT11的温湿度变量
+    uint8_t temperature, humidity;
+    atk_md0280_show_pic(5, 5, 50, 40, back_logo);//左上角返回按钮
+    while(DHT11_Init())	//DHT11初始化	
+	{
+		// LCD_ShowString(30,130,200,16,16,"DHT11 Error");
+		delay_ms(200);
+		// LCD_Fill(30,130,239,130+16,WHITE);
+ 		delay_ms(200);
+	}
+    atk_md0280_show_string(20, 130, ATK_MD0280_LCD_WIDTH, 32, "temp:", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);//在屏幕上显示温度
+    atk_md0280_show_string(20, 180, ATK_MD0280_LCD_WIDTH, 32, "humi:", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);//在屏幕上显示湿度
+    DHT11_Read_Data(&temperature, &humidity);//读取温湿度
+    atk_md0280_show_xnum(100, 130, temperature, 2, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    atk_md0280_show_xnum(100, 180, humidity, 2, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
 }
 
 
