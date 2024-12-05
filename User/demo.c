@@ -419,7 +419,7 @@ static void demo_show_ui(void)
 
     mode = next_mode;
 
-    //以下根据mode的值进行显示，每10ms刷新一次，显示的函数写在了displaymode.c中
+    //以下根据mode的值进行显示，每100ms刷新一次，显示的函数写在了displaymode.c中
     switch(mode)
     {
         //显示主界面
@@ -434,6 +434,13 @@ static void demo_show_ui(void)
 
         //显示DHT11界面
         case 11:
+            while(DHT11_Init())	//DHT11初始化	
+            {
+                // LCD_ShowString(30,130,200,16,16,"DHT11 Error");
+                delay_ms(200);
+                // LCD_Fill(30,130,239,130+16,WHITE);
+                delay_ms(200);
+            }
             display_DHT11();
             break;
 

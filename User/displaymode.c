@@ -121,20 +121,21 @@ void display_menu(void)
 void display_DHT11(void)
 {
     //定义DHT11的温湿度变量
-    uint8_t temperature, humidity;
+    static uint8_t temperature, humidity;
+    static uint8_t temperature_tmp, humidity_tmp;
     atk_md0280_show_pic(5, 5, 50, 40, back_logo);//左上角返回按钮
-    while(DHT11_Init())	//DHT11初始化	
-	{
-		// LCD_ShowString(30,130,200,16,16,"DHT11 Error");
-		delay_ms(200);
-		// LCD_Fill(30,130,239,130+16,WHITE);
- 		delay_ms(200);
-	}
     atk_md0280_show_string(20, 130, ATK_MD0280_LCD_WIDTH, 32, "temp:", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);//在屏幕上显示温度
     atk_md0280_show_string(20, 180, ATK_MD0280_LCD_WIDTH, 32, "humi:", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);//在屏幕上显示湿度
-    DHT11_Read_Data(&temperature, &humidity);//读取温湿度
-    atk_md0280_show_xnum(100, 130, temperature, 2, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
-    atk_md0280_show_xnum(100, 180, humidity, 2, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    delay_ms(100);
+    DHT11_Read_Data(&temperature, &humidity);
+    if ( temperature_tmp != temperature || humidity_tmp != humidity)
+    {
+        atk_md0280_fill(100, 130, 132, 212, ATK_MD0280_BLACK);
+        temperature_tmp = temperature;
+        humidity_tmp = humidity;
+    }
+    atk_md0280_show_xnum(100, 130, temperature_tmp, 2, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    atk_md0280_show_xnum(100, 180, humidity_tmp, 2, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
 }
 
 
