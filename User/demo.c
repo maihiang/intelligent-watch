@@ -7,8 +7,16 @@
 #include <math.h>
 #include "displaymode.h"
 #include "./SYSTEM/date/date.h"
+#include "./BSP/DHT11/dht11.h"
+#include "./BSP/ATK_MW8266D/atk_mw8266d.h"
 
 #define PI (float)(3.1415926)
+
+//WIFI相关宏定义
+#define DEMO_WIFI_SSID          "LCH"
+#define DEMO_WIFI_PWD           "LI,cai,hou,1105"
+#define DEMO_TCP_SERVER_IP      "192.168.43.159"
+#define DEMO_TCP_SERVER_PORT    "8080"
 
 /*
 模式相关全局变量
@@ -69,6 +77,12 @@ static void demo_show_ui(void)
                 next_mode = 11;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
+            //WIFI按钮相应
+            if ((x_scan >= 129)&&(x_scan <= 219)&&(y_scan >= 130)&&(y_scan <= 270))
+            {
+                next_mode = 12;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
         }
         
         //应用1：DHT11温湿度传感器
@@ -82,6 +96,16 @@ static void demo_show_ui(void)
             }
         }
 
+        //应用2：WIFI模块
+        if(mode == 12)
+        {
+            //返回按钮相应
+            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
+            {
+                next_mode = 1;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+        }
         //设置界面的操作
         if(mode == 2)
         {
@@ -436,12 +460,15 @@ static void demo_show_ui(void)
         case 11:
             while(DHT11_Init())	//DHT11初始化	
             {
-                // LCD_ShowString(30,130,200,16,16,"DHT11 Error");
                 delay_ms(200);
-                // LCD_Fill(30,130,239,130+16,WHITE);
                 delay_ms(200);
             }
             display_DHT11();
+            break;
+        
+        //显示WIFI界面
+        case 12:
+            display_WIFI();
             break;
 
         //显示设置界面
@@ -494,11 +521,10 @@ static void demo_show_ui(void)
  */
 void demo_run(void)
 {
-    uint8_t ret;
-    
+    uint8_t ret0;
     /* 初始化ATK-MD0280模块 */
-    ret = atk_md0280_init();
-    if (ret != 0)
+    ret0 = atk_md0280_init();
+    if (ret0 != 0)
     {
         printf("ATK-MD0280 init failed!\r\n");
         while (1)
@@ -513,6 +539,58 @@ void demo_run(void)
 
     /* 初始化日期 */
     year = 2024, month = 12, day = 31, hour = 23, minute = 59, second = 40;
+
+    /* WIFI模块初始化 */
+    uint8_t ret;
+    char ip_buf[16];
+    uint8_t key;
+    uint8_t is_unvarnished = 0;
+    
+        /* 初始化ATK-MW8266D */
+    ret = atk_mw8266d_init(115200);
+    if (ret != 0)
+    {
+        printf("ATK-MW8266D init failed!\r\n");
+        while (1)
+        {
+            LED0_TOGGLE();
+            delay_ms(200);
+        }
+    }
+    
+    printf("Joining to AP...\r\n");
+    ret  = atk_mw8266d_restore();                               /* 恢复出厂设置 */
+    ret += atk_mw8266d_at_test();                               /* AT测试 */
+    ret += atk_mw8266d_set_mode(1);                             /* Station模式 */
+    ret += atk_mw8266d_sw_reset();                              /* 软件复位 */
+    ret += atk_mw8266d_ate_config(0);                           /* 关闭回显功能 */
+    ret += atk_mw8266d_join_ap(DEMO_WIFI_SSID, DEMO_WIFI_PWD);  /* 连接WIFI */
+    ret += atk_mw8266d_get_ip(ip_buf);                          /* 获取IP地址 */
+    if (ret != 0)
+    {
+        printf("Error to join ap!\r\n");
+        while (1)
+        {
+            LED0_TOGGLE();
+            delay_ms(200);
+        }
+    }
+    // demo_show_ip(ip_buf);
+
+        /* 连接TCP服务器 */
+    ret = atk_mw8266d_connect_tcp_server(DEMO_TCP_SERVER_IP, DEMO_TCP_SERVER_PORT);
+    if (ret != 0)
+    {
+        printf("Error to connect tcp server!\r\n");
+        while (1)
+        {
+            LED0_TOGGLE();
+            delay_ms(200);
+        }
+    }
+    
+        /* 重新开始接收一帧数据 */
+    atk_mw8266d_uart_rx_restart();
 
     while (1)
     {

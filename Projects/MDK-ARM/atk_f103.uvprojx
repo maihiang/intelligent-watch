@@ -454,6 +454,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\Drivers\BSP\DHT11\dht11.c</FilePath>
             </File>
+            <File>
+              <FileName>atk_mw8266d.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\BSP\ATK_MW8266D\atk_mw8266d.c</FilePath>
+            </File>
+            <File>
+              <FileName>atk_mw8266d_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\BSP\ATK_MW8266D\atk_mw8266d_uart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

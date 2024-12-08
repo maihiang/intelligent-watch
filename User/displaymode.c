@@ -7,6 +7,8 @@
 #include "displaymode.h"
 #include <math.h>
 #include "img.h"
+#include "./BSP/KEY/key.h"
+#include "./BSP/ATK_MW8266D/atk_mw8266d.h"
 
 extern uint16_t year, month, day, hour, minute, second;
 extern uint16_t year_set, month_set, day_set, hour_set, minute_set, second_set;
@@ -113,6 +115,9 @@ void display_menu(void)
     //在屏幕上显示DHT11功能按钮
     atk_md0280_draw_rect(20,130,110,270,ATK_MD0280_WHITE);
     atk_md0280_show_string(35,175,ATK_MD0280_LCD_WIDTH,32,"DHT11",ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
+    //在屏幕上显示WIFI模块功能按钮
+    atk_md0280_draw_rect(129,130,219,270,ATK_MD0280_WHITE);
+    atk_md0280_show_string(144,175,ATK_MD0280_LCD_WIDTH,32,"WIFI",ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
 }
 
 /*
@@ -138,6 +143,136 @@ void display_DHT11(void)
     atk_md0280_show_xnum(100, 180, humidity_tmp, 2, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
 }
 
+/*
+以下就是一系列会用到的函数
+*/
+/**
+ * @brief       °´¼ü0¹¦ÄÜ£¬¹¦ÄÜ²âÊÔ
+ * @param       is_unvarnished: 0£¬Î´½øÈëÍ¸´«
+ *                              1£¬ÒÑ½øÈëÍ¸´«
+ * @retval      ÎÞ
+ */
+static void demo_key0_fun(uint8_t is_unvarnished)
+{
+    uint8_t ret;
+    
+    if (is_unvarnished == 0)
+    {
+        /* ½øÐÐATÖ¸Áî²âÊÔ */
+        ret = atk_mw8266d_at_test();
+        if (ret == 0)
+        {
+            printf("AT test success!\r\n");
+        }
+        else
+        {
+            printf("AT test failed!\r\n");
+        }
+    }
+    else
+    {
+        /* Í¨¹ýÍ¸´«£¬·¢ËÍÐÅÏ¢ÖÁTCP Server */
+        atk_mw8266d_uart_printf("This ATK-MW8266D TCP Connect Test.\r\n");
+    }
+}
+
+/**
+ * @brief       °´¼ü1¹¦ÄÜ£¬ÇÐ»»Í¸´«Ä£Ê½
+ * @param       is_unvarnished: 0£¬Î´½øÈëÍ¸´«
+ *                              1£¬ÒÑ½øÈëÍ¸´«
+ * @retval      ÎÞ
+ */
+static void demo_key1_fun(uint8_t *is_unvarnished)
+{
+    uint8_t ret;
+    
+    if (*is_unvarnished == 0)
+    {
+        /* ½øÈëÍ¸´« */
+        ret = atk_mw8266d_enter_unvarnished();
+        if (ret == 0)
+        {
+            *is_unvarnished = 1;
+            printf("Enter unvarnished!\r\n");
+        }
+        else
+        {
+            printf("Enter unvarnished failed!\r\n");
+        }
+    }
+    else
+    {
+        /* ÍË³öÍ¸´« */
+        atk_mw8266d_exit_unvarnished();
+        *is_unvarnished = 0;
+        printf("Exit unvarnished!\r\n");
+    }
+}
+
+/**
+ * @brief       ½øÈëÍ¸´«Ê±£¬½«½ÓÊÕ×ÔTCP ServerµÄÊý¾Ý·¢ËÍµ½´®¿Úµ÷ÊÔÖúÊÖ
+ * @param       is_unvarnished: 0£¬Î´½øÈëÍ¸´«
+ *                              1£¬ÒÑ½øÈëÍ¸´«
+ * @retval      ÎÞ
+ */
+static void demo_upload_data(uint8_t is_unvarnished)
+{
+    uint8_t *buf;
+    
+    if (is_unvarnished == 1)
+    {
+        /* ½ÓÊÕÀ´×ÔATK-MW8266D UARTµÄÒ»Ö¡Êý¾Ý */
+        buf = atk_mw8266d_uart_rx_get_frame();
+        if (buf != NULL)
+        {
+            printf("%s", buf);
+            /* ÖØ¿ª¿ªÊ¼½ÓÊÕÀ´×ÔATK-MW8266D UARTµÄÊý¾Ý */
+            atk_mw8266d_uart_rx_restart();
+        }
+    }
+}
+
+
+/*
+以下函数的功能是在屏幕上显示WIFI界面
+*/
+void display_WIFI(void)
+{
+    uint8_t key;
+    uint8_t is_unvarnished = 0;
+    atk_md0280_show_pic(5, 5, 50, 40, back_logo);//左上角返回按钮
+    atk_md0280_show_string(20, 130, ATK_MD0280_LCD_WIDTH, 32, "WIFI", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);//在屏幕上显示WIFI
+    atk_md0280_show_string(20, 180, ATK_MD0280_LCD_WIDTH, 32, "connecting", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);//在屏幕上显示连接中
+    while (1)
+    {
+        key = key_scan(0);
+        
+        switch (key)
+        {
+            case KEY0_PRES:
+            {
+                /* 功能测试 */
+                demo_key0_fun(is_unvarnished);
+                break;
+            }
+            case KEY1_PRES:
+            {
+                /* 透传模式切换 */
+                demo_key1_fun(&is_unvarnished);
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+        
+        /* 发送透传接受自TCP Server的数据到串口调试助手 */
+        demo_upload_data(is_unvarnished);
+        
+        delay_ms(10);
+    }
+}
 
 /*
 以下函数的功能是在屏幕上显示设置界面
