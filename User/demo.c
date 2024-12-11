@@ -1,4 +1,3 @@
-
 #include "demo.h"
 #include "./BSP/ATK_MD0280/atk_md0280.h"
 #include "./BSP/led/led.h"
@@ -9,14 +8,9 @@
 #include "./SYSTEM/date/date.h"
 #include "./BSP/DHT11/dht11.h"
 #include "./BSP/ATK_MW8266D/atk_mw8266d.h"
+#include "./BSP/WIFI/wifi.h"
 
 #define PI (float)(3.1415926)
-
-//WIFI相关宏定义
-#define DEMO_WIFI_SSID          "LCH"
-#define DEMO_WIFI_PWD           "LI,cai,hou,1105"
-#define DEMO_TCP_SERVER_IP      "192.168.43.159"
-#define DEMO_TCP_SERVER_PORT    "8080"
 
 /*
 模式相关全局变量
@@ -48,7 +42,7 @@ static void demo_show_ui(void)
         if(mode == 0)
         {
             /*左下角的按钮，按下去后进入选择各个功能的界面*/
-            if ((x_scan >= 0) && (x_scan <= 50) && (y_scan >= 269) && (y_scan <= 319))
+            if ((x_scan <= 50) && (y_scan >= 269) && (y_scan <= 319))
             {
                 next_mode = 1;
                 atk_md0280_clear(ATK_MD0280_BLACK);
@@ -66,7 +60,7 @@ static void demo_show_ui(void)
         if(mode == 1)
         {
             //返回按钮相应
-            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
+            if ((x_scan <= 60)&&(y_scan <= 50))
             {
                 next_mode = 0;
                 atk_md0280_clear(ATK_MD0280_BLACK);
@@ -89,7 +83,7 @@ static void demo_show_ui(void)
         if(mode == 11)
         {
             //返回按钮相应
-            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
+            if ((x_scan <= 60)&&(y_scan <= 50))
             {
                 next_mode = 1;
                 atk_md0280_clear(ATK_MD0280_BLACK);
@@ -100,7 +94,7 @@ static void demo_show_ui(void)
         if(mode == 12)
         {
             //返回按钮相应
-            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
+            if ((x_scan <= 60)&&(y_scan <= 50))
             {
                 next_mode = 1;
                 atk_md0280_clear(ATK_MD0280_BLACK);
@@ -110,7 +104,7 @@ static void demo_show_ui(void)
         if(mode == 2)
         {
             //返回按钮相应
-            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
+            if ((x_scan <= 60)&&(y_scan <= 50))
             {
                 next_mode = 0;
                 atk_md0280_clear(ATK_MD0280_BLACK);
@@ -139,7 +133,7 @@ static void demo_show_ui(void)
         if(mode == 21)
         {
             //返回按钮相应
-            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
+            if ((x_scan <= 60)&&(y_scan <= 50))
             {
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
@@ -184,7 +178,7 @@ static void demo_show_ui(void)
         if(mode == 22)
         {
             //返回按钮相应
-            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
+            if ((x_scan <= 60)&&(y_scan <= 50))
             {
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
@@ -227,7 +221,7 @@ static void demo_show_ui(void)
             }
 
             //切换成年份设置界面
-            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 80)&&(y_scan <= 180))
+            if ((x_scan <= 60)&&(y_scan >= 80)&&(y_scan <= 180))
             {
                 next_mode = 21;
                 year_set = year;
@@ -239,7 +233,7 @@ static void demo_show_ui(void)
         if(mode == 23)
         {
             //返回按钮相应
-            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
+            if ((x_scan <= 60)&&(y_scan <= 50))
             {
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
@@ -274,7 +268,7 @@ static void demo_show_ui(void)
             }
 
             //切换成月份设置界面
-            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 80)&&(y_scan <= 180))
+            if ((x_scan <= 60)&&(y_scan >= 80)&&(y_scan <= 180))
             {
                 next_mode = 22;
                 month_set = month;
@@ -286,7 +280,7 @@ static void demo_show_ui(void)
         if(mode == 24)
         {
             //返回按钮相应
-            if ((x_scan >= 0)&&(x_scan <= 50)&&(y_scan >= 0)&&(y_scan <= 50))
+            if ((x_scan <= 50)&&(y_scan <= 50))
             {
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
@@ -336,7 +330,7 @@ static void demo_show_ui(void)
         if(mode == 25)
         {
             //返回按钮相应
-            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
+            if ((x_scan <= 60)&&(y_scan <= 50))
             {
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
@@ -374,7 +368,7 @@ static void demo_show_ui(void)
             }
 
             //切换成小时设置界面
-            if ((x_scan >= 0)&&(x_scan <= 50)&&(y_scan >= 80)&&(y_scan <= 180))
+            if ((x_scan <= 50)&&(y_scan >= 80)&&(y_scan <= 180))
             {
                 next_mode = 24;
                 hour_set = hour;
@@ -394,7 +388,7 @@ static void demo_show_ui(void)
         if(mode == 26)
         {
             //返回按钮相应
-            if ((x_scan >= 0)&&(x_scan <= 60)&&(y_scan >= 0)&&(y_scan <= 50))
+            if ((x_scan <= 60)&&(y_scan <= 50))
             {
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
@@ -432,7 +426,7 @@ static void demo_show_ui(void)
             }
 
             //切换成分钟设置界面
-            if ((x_scan >= 0)&&(x_scan <= 50)&&(y_scan >= 80)&&(y_scan <= 180))
+            if ((x_scan <= 50)&&(y_scan >= 80)&&(y_scan <= 180))
             {
                 next_mode = 25;
                 minute_set = minute;
@@ -539,58 +533,6 @@ void demo_run(void)
 
     /* 初始化日期 */
     year = 2024, month = 12, day = 31, hour = 23, minute = 59, second = 40;
-
-    /* WIFI模块初始化 */
-    uint8_t ret;
-    char ip_buf[16];
-    uint8_t key;
-    uint8_t is_unvarnished = 0;
-    
-        /* 初始化ATK-MW8266D */
-    ret = atk_mw8266d_init(115200);
-    if (ret != 0)
-    {
-        printf("ATK-MW8266D init failed!\r\n");
-        while (1)
-        {
-            LED0_TOGGLE();
-            delay_ms(200);
-        }
-    }
-    
-    printf("Joining to AP...\r\n");
-    ret  = atk_mw8266d_restore();                               /* 恢复出厂设置 */
-    ret += atk_mw8266d_at_test();                               /* AT测试 */
-    ret += atk_mw8266d_set_mode(1);                             /* Station模式 */
-    ret += atk_mw8266d_sw_reset();                              /* 软件复位 */
-    ret += atk_mw8266d_ate_config(0);                           /* 关闭回显功能 */
-    ret += atk_mw8266d_join_ap(DEMO_WIFI_SSID, DEMO_WIFI_PWD);  /* 连接WIFI */
-    ret += atk_mw8266d_get_ip(ip_buf);                          /* 获取IP地址 */
-    if (ret != 0)
-    {
-        printf("Error to join ap!\r\n");
-        while (1)
-        {
-            LED0_TOGGLE();
-            delay_ms(200);
-        }
-    }
-    // demo_show_ip(ip_buf);
-
-        /* 连接TCP服务器 */
-    ret = atk_mw8266d_connect_tcp_server(DEMO_TCP_SERVER_IP, DEMO_TCP_SERVER_PORT);
-    if (ret != 0)
-    {
-        printf("Error to connect tcp server!\r\n");
-        while (1)
-        {
-            LED0_TOGGLE();
-            delay_ms(200);
-        }
-    }
-    
-        /* 重新开始接收一帧数据 */
-    atk_mw8266d_uart_rx_restart();
 
     while (1)
     {

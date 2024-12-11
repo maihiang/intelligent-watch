@@ -88,7 +88,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if (htim->Instance == BTIM_TIMX_INT)
     {
-        LED1_TOGGLE(); /* LED1反转 */
         updateTime(&year, &month, &day, &hour, &minute, &second);
     }
 }

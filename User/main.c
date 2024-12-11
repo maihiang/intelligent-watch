@@ -23,8 +23,8 @@
 #include "./SYSTEM/usart/usart.h"
 #include "./BSP/LED/led.h"
 #include "./BSP/KEY/key.h"
-#include "demo.h"
 #include "./BSP/TIMER/btim.h"
+#include "demo.h"
 
 /**
  * @brief       显示实验信息

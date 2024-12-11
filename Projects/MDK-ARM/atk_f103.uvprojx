@@ -464,6 +464,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Drivers\BSP\ATK_MW8266D\atk_mw8266d_uart.c</FilePath>
             </File>
+            <File>
+              <FileName>wifi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\BSP\WIFI\wifi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
