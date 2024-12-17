@@ -8,6 +8,7 @@
 #include <math.h>
 #include "img.h"
 #include "./BSP/KEY/key.h"
+#include "./SYSTEM/sys/sys.h"
 
 extern uint16_t year, month, day, hour, minute, second;
 extern uint16_t year_set, month_set, day_set, hour_set, minute_set, second_set;
@@ -94,7 +95,7 @@ void display_main(void)
 
     //在左下角显示应用菜单按钮，右下角显示设置按钮
     draw_menu_logo(2, 267);
-    atk_md0280_show_pic(187, 267, 50, 50, setting_logo);
+    atk_md0280_show_pic(187, 267, 50, 50, (uint8_t *)setting_logo);
 
     //在屏幕上显示时间
     atk_md0280_show_xnum(71, 165, hour, 2, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_24, ATK_MD0280_RED);
@@ -109,7 +110,7 @@ void display_main(void)
 */
 void display_menu(void)
 {
-    atk_md0280_show_pic(5, 5, 50, 40, back_logo);
+    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo);
     draw_menu_logo(95, 60);
     //在屏幕上显示DHT11功能按钮
     atk_md0280_draw_rect(20,130,110,270,ATK_MD0280_WHITE);
@@ -127,7 +128,7 @@ void display_DHT11(void)
     //定义DHT11的温湿度变量
     static uint8_t temperature, humidity;
     static uint8_t temperature_tmp, humidity_tmp;
-    atk_md0280_show_pic(5, 5, 50, 40, back_logo);//左上角返回按钮
+    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo);//左上角返回按钮
     atk_md0280_show_string(20, 130, ATK_MD0280_LCD_WIDTH, 32, "temp:", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);//在屏幕上显示温度
     atk_md0280_show_string(20, 180, ATK_MD0280_LCD_WIDTH, 32, "humi:", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);//在屏幕上显示湿度
     delay_ms(100);
@@ -147,8 +148,8 @@ void display_DHT11(void)
 */
 void display_setting(void)
 {
-    atk_md0280_show_pic(5, 5, 50, 40, back_logo);//左上角返回按钮
-    atk_md0280_show_pic(95, 60, 50, 50, setting_logo);//中上方设置按钮
+    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo);//左上角返回按钮
+    atk_md0280_show_pic(95, 60, 50, 50, (uint8_t *)setting_logo);//中上方设置按钮
     //在屏幕上显示设置日期按钮
     atk_md0280_draw_rect(20,130,110,270,ATK_MD0280_WHITE);
     atk_md0280_show_string(35,175,ATK_MD0280_LCD_WIDTH,32,"date",ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
@@ -165,7 +166,7 @@ void display_setting_year(void)
     static uint16_t year_set_tmp;
 
     //左上角返回按钮
-    atk_md0280_show_pic(5, 5, 50, 40, back_logo);
+    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo);
 
     //如果日期发生变化，清除原来的日期
     if(year_set_tmp != year_set)
@@ -197,7 +198,7 @@ void display_setting_month(void)
     static uint16_t month_set_tmp;
 
     //左上角返回按钮
-    atk_md0280_show_pic(5, 5, 50, 40, back_logo);
+    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo);
 
     //如果日期发生变化，清除原来的日期
     if(month_set_tmp != month_set)
@@ -232,7 +233,7 @@ void display_setting_day(void)
     static uint16_t day_set_tmp;
 
     //左上角返回按钮
-    atk_md0280_show_pic(5, 5, 50, 40, back_logo);
+    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo);
 
     //如果日期发生变化，清除原来的日期
     if(day_set_tmp != day_set)
@@ -264,7 +265,7 @@ void display_setting_hour(void)
     static uint16_t hour_set_tmp;
 
     //左上角返回按钮
-    atk_md0280_show_pic(5, 5, 50, 40, back_logo);
+    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo);
 
     //如果小时发生变化，清除原来的小时
     if(hour_set_tmp != hour_set)
@@ -296,7 +297,7 @@ void display_setting_minute(void)
     static uint16_t minute_set_tmp;
 
     //左上角返回按钮
-    atk_md0280_show_pic(5, 5, 50, 40, back_logo);
+    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo);
 
     //如果分钟发生变化，清除原来的分钟
     if(minute_set_tmp != minute_set)
@@ -331,7 +332,7 @@ void display_setting_second(void)
     static uint16_t second_set_tmp;
 
     //左上角返回按钮
-    atk_md0280_show_pic(5, 5, 50, 40, back_logo);
+    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo);
 
     //如果秒发生变化，清除原来的秒
     if(second_set_tmp != second_set)

@@ -1,11 +1,14 @@
 #include "wifi.h"
-#include "img.h"
+// #include "img.h"
 #include "./BSP/ATK_MD0280/atk_md0280.h"
 #include "./BSP/ATK_MW8266D/atk_mw8266d.h"
 #include "./BSP/KEY/key.h"
 #include "./BSP/LED/led.h"
 #include "./SYSTEM/usart/usart.h"
 #include "./SYSTEM/delay/delay.h"
+
+extern uint8_t* back_logo;
+extern uint8_t* setting_logo;
 
 //定义WIFI的SSID，密码，TCP服务器的IP和端口
 #define DEMO_WIFI_SSID          "LCH"
@@ -87,7 +90,7 @@ void display_WIFI(void)
 
         t++;
     }
-    atk_md0280_show_pic(5, 5, 50, 40, back_logo);//左上角返回按钮
+    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo);//左上角返回按钮
     atk_md0280_show_string(20, 130, ATK_MD0280_LCD_WIDTH, 32, "WIFI", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);//在屏幕上显示WIFI
     atk_md0280_show_string(20, 180, ATK_MD0280_LCD_WIDTH, 32, "connecting", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);//在屏幕上显示连接中
 
