@@ -452,11 +452,11 @@ static void demo_show_ui(void)
 
         //显示DHT11界面
         case 11:
-            while(DHT11_Init())	//DHT11初始化	
-            {
-                delay_ms(200);
-                delay_ms(200);
-            }
+            DHT11_Init();	//DHT11初始化	
+
+            delay_ms(200);
+						delay_ms(200);
+
             display_DHT11();
             break;
         
