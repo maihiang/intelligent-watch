@@ -362,7 +362,7 @@
             </VariousControls>
           </Aads>
           <LDads>
-            <umfTarg>1</umfTarg>
+            <umfTarg>0</umfTarg>
             <Ropi>0</Ropi>
             <Rwpi>0</Rwpi>
             <noStLib>0</noStLib>
@@ -371,7 +371,7 @@
             <TextAddressRange>0x08000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile></ScatterFile>
+            <ScatterFile>..\..\Output\atk_f103.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
             <Misc></Misc>
@@ -450,11 +450,6 @@
               <FilePath>..\..\Drivers\BSP\TIMER\btim.c</FilePath>
             </File>
             <File>
-              <FileName>dht11.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\BSP\DHT11\dht11.c</FilePath>
-            </File>
-            <File>
               <FileName>atk_mw8266d.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Drivers\BSP\ATK_MW8266D\atk_mw8266d.c</FilePath>
@@ -469,16 +464,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\Drivers\BSP\WIFI\wifi.c</FilePath>
             </File>
+            <File>
+              <FileName>dht11.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\BSP\DHT11\dht11.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Drivers/SYSTEM</GroupName>
           <Files>
-            <File>
-              <FileName>delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\SYSTEM\delay\delay.c</FilePath>
-            </File>
             <File>
               <FileName>sys.c</FileName>
               <FileType>1</FileType>
@@ -493,6 +488,11 @@
               <FileName>date.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Drivers\SYSTEM\date\date.c</FilePath>
+            </File>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\SYSTEM\delay\delay.c</FilePath>
             </File>
           </Files>
         </Group>

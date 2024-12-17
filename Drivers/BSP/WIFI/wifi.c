@@ -26,12 +26,13 @@ static int t=0;
 */
 void display_WIFI(void)
 {
-    uint8_t ret;
-    char ip_buf[16];
-    uint8_t key;
-    uint8_t is_unvarnished = 0;
+    static uint8_t ret;
+    static char ip_buf[16];
+    static uint8_t key;
+    static uint8_t is_unvarnished;
     if(t==0)
     {
+				is_unvarnished = 0;
         /* 初始化ATK-MW8266D模块 */
         ret = atk_mw8266d_init(115200);
         if (ret != 0)
@@ -43,6 +44,8 @@ void display_WIFI(void)
                 delay_ms(200);
             }
         }
+				
+				atk_md0280_show_string(20, 130, ATK_MD0280_LCD_WIDTH, 32, "1", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);//在屏幕上显示WIFI
 
         /* 连接WIFI */
         printf("Joining to AP...\r\n");
@@ -63,6 +66,8 @@ void display_WIFI(void)
             }
         }
         demo_show_ip(ip_buf);
+				
+				atk_md0280_show_string(30, 130, ATK_MD0280_LCD_WIDTH, 32, "2", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);//在屏幕上显示WIFI
 
         /* 连接TCP服务器 */
         ret = atk_mw8266d_connect_tcp_server(DEMO_TCP_SERVER_IP, DEMO_TCP_SERVER_PORT);
@@ -75,6 +80,7 @@ void display_WIFI(void)
                 delay_ms(200);
             }
         }
+				atk_md0280_show_string(40, 130, ATK_MD0280_LCD_WIDTH, 32, "3", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);//在屏幕上显示WIFI
         
         /* 重新开始接收新的一帧数据 */
         atk_mw8266d_uart_rx_restart();
