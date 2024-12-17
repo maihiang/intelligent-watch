@@ -111,8 +111,8 @@
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
           <SimDllArguments> -REMAP</SimDllArguments>
-          <SimDlgDll>DCM.DLL</SimDlgDll>
-          <SimDlgDllArguments>-pCM3</SimDlgDllArguments>
+          <SimDlgDll>DARMSTM.DLL</SimDlgDll>
+          <SimDlgDllArguments>-pSTM32F103ZE</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
           <TargetDllArguments></TargetDllArguments>
           <TargetDlgDll>TCM.DLL</TargetDlgDll>
@@ -468,6 +468,11 @@
               <FileName>dht11.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\Drivers\BSP\DHT11\dht11.s</FilePath>
+            </File>
+            <File>
+              <FileName>csa.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\BSP\CSA\csa.c</FilePath>
             </File>
           </Files>
         </Group>

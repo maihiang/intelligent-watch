@@ -536,6 +536,9 @@ void demo_run(void)
     /* 初始化日期 */
     year = 2024, month = 12, day = 31, hour = 23, minute = 59, second = 40;
 
+    /* 尝试跑一遍核心算法 */
+    process_CSA1();
+
     while (1)
     {
         /* 进行页面刷新显示，显示完成后延时0.1秒，预计每秒刷新10次 */
