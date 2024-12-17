@@ -9,8 +9,10 @@
 #include "./BSP/DHT11/dht11.h"
 #include "./BSP/ATK_MW8266D/atk_mw8266d.h"
 #include "./BSP/WIFI/wifi.h"
+#include "math.h"
+#include "arm_math.h"
 
-#define PI (float)(3.1415926)
+//#define PI (float)(3.1415926)
 
 /*
 模式相关全局变量
