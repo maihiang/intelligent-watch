@@ -2,6 +2,7 @@
 #include "./BSP/ATK_MD0280/atk_md0280.h"
 #include "./BSP/led/led.h"
 #include "./BSP/DHT11/dht11.h"
+#include "./BSP/CSA/csa.h"
 #include "./SYSTEM/usart/usart.h"
 #include "./SYSTEM/delay/delay.h"
 #include "displaymode.h"
@@ -113,11 +114,14 @@ void display_menu(void)
     atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo);
     draw_menu_logo(95, 60);
     //在屏幕上显示DHT11功能按钮
-    atk_md0280_draw_rect(20,130,110,270,ATK_MD0280_WHITE);
-    atk_md0280_show_string(35,175,ATK_MD0280_LCD_WIDTH,32,"DHT11",ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
+    atk_md0280_draw_rect(20,130,110,170,ATK_MD0280_WHITE);
+    atk_md0280_show_string(30,135,ATK_MD0280_LCD_WIDTH,32,"DHT11",ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
     //在屏幕上显示WIFI模块功能按钮
-    atk_md0280_draw_rect(129,130,219,270,ATK_MD0280_WHITE);
-    atk_md0280_show_string(144,175,ATK_MD0280_LCD_WIDTH,32,"WIFI",ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
+    atk_md0280_draw_rect(129,130,219,170,ATK_MD0280_WHITE);
+    atk_md0280_show_string(139,135,ATK_MD0280_LCD_WIDTH,32,"WIFI",ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
+    //在屏幕上显示核心算法功能按钮
+    atk_md0280_draw_rect(20,180,110,220,ATK_MD0280_WHITE);
+    atk_md0280_show_string(30,185,ATK_MD0280_LCD_WIDTH,32,"CORE",ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
 }
 
 /*
@@ -141,6 +145,25 @@ void display_DHT11(void)
     }
     atk_md0280_show_xnum(100, 130, temperature_tmp, 2, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
     atk_md0280_show_xnum(100, 180, humidity_tmp, 2, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+}
+
+/*
+以下函数的功能是在屏幕上显示核心算法得出来的深度图像
+*/
+void display_CORE(void)
+{
+    // process_CSA1();//跑一遍核心算法
+    // 核心算法并不是在这里跑，因为只需要跑一次
+    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo);//左上角返回按钮
+    static uint8_t t;
+    if (t==0)
+    {
+        process_CSA1();
+        t++;
+    }
+    // 此时跑完后，echo_use[16][512]中存储的就是计算完成的结果
+    // todo：把echo_use显示出来
+    atk_md0280_show_string(35,175,ATK_MD0280_LCD_WIDTH,32,"DONE",ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
 }
 
 /*

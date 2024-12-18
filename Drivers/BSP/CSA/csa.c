@@ -304,7 +304,7 @@ void azimuthcomp_process(float32_t   signal_x[][512],float32_t  * R,float32_t  *
     }
    // return signal_x;
 }
-void process_CSA1()
+void process_CSA1(void)
 {
     uint16_t i,j;
     
@@ -351,5 +351,10 @@ void process_CSA1()
             f_doc=echo_use[i][j*2]*echo_use[i][j*2]+echo_use[i][j*2+1]*echo_use[i][j*2+1];
             arm_sqrt_f32(f_doc,&echo_use[i][j*2]);
         }
+				for(j=0;j<256;j++)
+				{
+						echo_use[i][j]=echo_use[i][j*2];
+				}
+				
     }
 }

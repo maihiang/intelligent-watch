@@ -55,9 +55,6 @@ int main(void)
     key_init();                         /* 初始化按键 */
     btim_timx_int_init(10000 - 1, 7200 - 1); /* 初始化定时器，10kHz的技术频率，计数10000次为1s */
     show_mesg();                        /* 显示实验信息 */
-		float data;
-		data=arm_sin_f32(PI/6);//sin（30°），理论值为0.5
-		printf("number is %f",data);
 		delay_ms(1000);
     demo_run();                         /* 运行示例程序 */
 }

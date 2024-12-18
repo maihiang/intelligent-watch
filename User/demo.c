@@ -9,6 +9,7 @@
 #include "./BSP/DHT11/dht11.h"
 #include "./BSP/ATK_MW8266D/atk_mw8266d.h"
 #include "./BSP/WIFI/wifi.h"
+#include "./BSP/CSA/csa.h"
 #include "math.h"
 #include "arm_math.h"
 
@@ -68,15 +69,21 @@ static void demo_show_ui(void)
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
             //DHT11按钮相应
-            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 130)&&(y_scan <= 270))
+            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 130)&&(y_scan <= 170))
             {
                 next_mode = 11;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
             //WIFI按钮相应
-            if ((x_scan >= 129)&&(x_scan <= 219)&&(y_scan >= 130)&&(y_scan <= 270))
+            if ((x_scan >= 129)&&(x_scan <= 219)&&(y_scan >= 130)&&(y_scan <= 170))
             {
                 next_mode = 12;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+            //核心算法按钮响应
+            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 180)&&(y_scan <= 220))
+            {
+                next_mode = 13;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
         }
@@ -102,6 +109,18 @@ static void demo_show_ui(void)
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
         }
+
+        //应用3：核心算法的画图
+        if(mode == 13)
+        {
+            //返回按钮相应
+            if ((x_scan <= 60)&&(y_scan <= 50))
+            {
+                next_mode = 1;
+                atk_md0280_clear(ATK_MD0280_BLACK);
+            }
+        }
+
         //设置界面的操作
         if(mode == 2)
         {
@@ -466,6 +485,11 @@ static void demo_show_ui(void)
         case 12:
             display_WIFI();
             break;
+        
+        //显示核心算法界面
+        case 13:
+            display_CORE();
+            break;
 
         //显示设置界面
         case 2:
@@ -536,8 +560,6 @@ void demo_run(void)
     /* 初始化日期 */
     year = 2024, month = 12, day = 31, hour = 23, minute = 59, second = 40;
 
-    /* 尝试跑一遍核心算法 */
-    process_CSA1();
 
     while (1)
     {
