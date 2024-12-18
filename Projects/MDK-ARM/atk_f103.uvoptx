@@ -162,118 +162,35 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>161</LineNumber>
+          <LineNumber>1262</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134255880</Address>
+          <Address>134247974</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\User\displaymode.c</Filename>
+          <Filename>..\..\Drivers\BSP\ATK_MD0280\atk_md0280.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\atk_f103\../../User/displaymode.c\161</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>336</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134266158</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\Drivers\BSP\CSA\csa.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\atk_f103\../../Drivers/BSP/CSA/csa.c\336</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>330</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134266126</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\Drivers\BSP\CSA\csa.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\atk_f103\../../Drivers/BSP/CSA/csa.c\330</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>331</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134266134</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\Drivers\BSP\CSA\csa.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\atk_f103\../../Drivers/BSP/CSA/csa.c\331</Expression>
+          <Expression>\\atk_f103\../../Drivers/BSP/ATK_MD0280/atk_md0280.c\1262</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>hour_set</ItemText>
+          <ItemText>y_index,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>hour_set</ItemText>
+          <ItemText>x_index,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>temperature,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>3</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>humidity,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>4</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>temperature_tmp,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>5</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>humidity_tmp,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>6</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>is_unvarnished</ItemText>
-        </Ww>
-        <Ww>
-          <count>7</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>nus</ItemText>
-        </Ww>
-        <Ww>
-          <count>8</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>R0</ItemText>
-        </Ww>
-        <Ww>
-          <count>9</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>R1</ItemText>
+          <ItemText>pic_temp,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -281,6 +198,11 @@
           <count>0</count>
           <WinNumber>2</WinNumber>
           <ItemText>echo_use</ItemText>
+        </Ww>
+        <Ww>
+          <count>1</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>echo_use[16]</ItemText>
         </Ww>
       </WatchWindow2>
       <Tracepoint>
@@ -290,7 +212,7 @@
         <trace>0</trace>
         <periodic>1</periodic>
         <aLwin>1</aLwin>
-        <aCover>1</aCover>
+        <aCover>0</aCover>
         <aSer1>0</aSer1>
         <aSer2>0</aSer2>
         <aPa>0</aPa>

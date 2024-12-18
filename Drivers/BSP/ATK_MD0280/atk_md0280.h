@@ -154,5 +154,6 @@ void atk_md0280_show_string(uint16_t x, uint16_t y, uint16_t width, uint16_t hei
 void atk_md0280_show_xnum(uint16_t x, uint16_t y, uint32_t num, uint8_t len, atk_md0280_num_mode_t mode, atk_md0280_lcd_font_t font, uint16_t color);   /* ATK-MD0280模块LCD显示数字，可控制显示高位0 */
 void atk_md0280_show_num(uint16_t x, uint16_t y, uint32_t num, uint8_t len, atk_md0280_lcd_font_t font, uint16_t color);                                /* ATK-MD0280模块LCD显示数字，不显示高位0 */
 void atk_md0280_show_pic(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t *pic);                                                        /* ATK-MD0280模块LCD图片 */
+void atk_md0280_show_core(uint16_t x, uint16_t y);
 
 #endif

@@ -22,6 +22,7 @@
 #include "./BSP/ATK_MD0280/atk_md0280_font.h"
 #include "./BSP/ATK_MD0280/atk_md0280_fsmc.h"
 #include "./SYSTEM/delay/delay.h"
+#include "./BSP/CSA/csa.h"
 
 /* ATK-MD0280模块LCD驱动器ID */
 #define ATK_MD0280_CHIP_ID1         0x9341
@@ -1214,6 +1215,56 @@ void atk_md0280_show_pic(uint16_t x, uint16_t y, uint16_t width, uint16_t height
             pic_temp += *pic;
             pic++;
             atk_md0280_fsmc_write_dat(pic_temp);
+        }
+    }
+}
+
+/**
+ * @brief       把16位线性增大的数字转换成连续变化的16位RGB565
+ * @param       x     : 数字
+ * @retval      16位连续变化RGB565
+ */
+uint16_t linear_to_rgb565(uint16_t linear_value) {
+    // 将16位线性增大的数字分成三个部分
+    uint8_t red = (linear_value >> 11) & 0x1F;   // 高5位
+    uint8_t green = (linear_value >> 5) & 0x3F;  // 中间6位
+    uint8_t blue = linear_value & 0x1F;          // 低5位
+
+    // 平滑映射到RGB565格式
+    uint16_t rgb565 = (red << 11) | (green << 5) | blue;
+    return rgb565;
+}
+
+
+/**
+ * @brief       把echo_use[16][256]显示出来
+ * @param       x：显示的起始x坐标
+ * @param       y：显示的起始y坐标
+ * @retval      无
+ */
+//echo_use[i][j]中，i的范围是0-15，j的范围是0-255
+void atk_md0280_show_core(uint16_t x, uint16_t y)
+{
+    uint16_t x_index;
+    uint16_t y_index;
+    
+    atk_md0280_set_column_address(x, x + 9*16 - 1);
+    atk_md0280_set_page_address(y, y + 256 - 1);
+    atk_md0280_start_write_memory();
+    for (y_index=y; y_index<(y + 256); y_index++)
+    {
+        for (x_index=x; x_index<(x + 16); x_index++)
+        {
+            uint16_t pic_temp = (uint16_t)((echo_use[x_index-x][y_index-y] / 11.0) * 65535);
+            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
+            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
+            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
+            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
+            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
+            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
+            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
+            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
+            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
         }
     }
 }
