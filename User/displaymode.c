@@ -163,8 +163,7 @@ void display_CORE(void)
     }
     // 此时跑完后，echo_use[16][512]中存储的就是计算完成的结果
     // todo：把echo_use显示出来
-    //atk_md0280_show_string(135,175,ATK_MD0280_LCD_WIDTH,32,"DONE",ATK_MD0280_LCD_FONT_32,ATK_MD0280_WHITE);
-    atk_md0280_show_core(80,20);
+    atk_md0280_show_core(70,30);
 }
 
 /*

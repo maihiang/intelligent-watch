@@ -66,8 +66,8 @@ void Km_process(float32_t* Km_in,float32_t* D,float32_t* f_azimuth);//新的调�
 void Rangecomp_process(float32_t signal_x[][512],float32_t* frange,float32_t* Km_in, float32_t* CS_F);
 void azimuthcomp_process(float32_t signal_x[][512],float32_t* R,float32_t* Cs_f,float32_t* f_azimuth,float32_t* D_in,float32_t* Km_in);
 
-void echo_init();
-void process_CSA1();
+void echo_init(void);
+void process_CSA1(void);
 
 
 #endif

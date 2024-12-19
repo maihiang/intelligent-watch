@@ -23,6 +23,7 @@
 #include "./BSP/ATK_MD0280/atk_md0280_fsmc.h"
 #include "./SYSTEM/delay/delay.h"
 #include "./BSP/CSA/csa.h"
+#include <math.h>
 
 /* ATK-MD0280模块LCD驱动器ID */
 #define ATK_MD0280_CHIP_ID1         0x9341
@@ -1220,19 +1221,65 @@ void atk_md0280_show_pic(uint16_t x, uint16_t y, uint16_t width, uint16_t height
 }
 
 /**
- * @brief       把16位线性增大的数字转换成连续变化的16位RGB565
+ * @brief       把15位线性增大的数字转换成连续变化的16位RGB565
  * @param       x     : 数字
  * @retval      16位连续变化RGB565
  */
 uint16_t linear_to_rgb565(uint16_t linear_value) {
-    // 将16位线性增大的数字分成三个部分
-    uint8_t red = (linear_value >> 11) & 0x1F;   // 高5位
-    uint8_t green = (linear_value >> 5) & 0x3F;  // 中间6位
-    uint8_t blue = linear_value & 0x1F;          // 低5位
+    uint8_t r,g,b;
+    uint16_t rgb;
 
     // 平滑映射到RGB565格式
-    uint16_t rgb565 = (red << 11) | (green << 5) | blue;
-    return rgb565;
+    if (linear_value <= 1*31)
+    {
+        r=0;
+        g=0;
+        b=linear_value - 0*31;
+    }
+    else if (linear_value <= 2*31)
+    {
+        r=0;
+        g=linear_value - 1*31;
+        b=31;
+    }
+    else if (linear_value <= 3*31)
+    {
+        r=0;
+        g=31;
+        b=3*31 - linear_value;
+    }
+    else if (linear_value <= 4*31)
+    {
+        r=linear_value - 3*31;
+        g=31;
+        b=0;
+    }
+    else if (linear_value <= 5*31)
+    {
+        r=31;
+        g=5*31 - linear_value;
+        b=0;
+    }
+    else if (linear_value <= 6*31)
+    {
+        r=31;
+        g=0;
+        b=linear_value - 5*31;
+    }
+    else if (linear_value <= 7*31)
+    {
+        r=31;
+        g=linear_value - 6*31;
+        b=31;
+    }
+    r=r&0x1F;
+    g=g&0x1F;
+    b=b&0x1F;
+
+    g = g << 1;
+
+    rgb = (r << 11) + (g << 5) + b;
+    return rgb;
 }
 
 
@@ -1247,24 +1294,24 @@ void atk_md0280_show_core(uint16_t x, uint16_t y)
 {
     uint16_t x_index;
     uint16_t y_index;
-    
-    atk_md0280_set_column_address(x, x + 9*16 - 1);
+    int i;
+    i=8;
+    atk_md0280_set_column_address(x, x + i*16 - 1);
     atk_md0280_set_page_address(y, y + 256 - 1);
     atk_md0280_start_write_memory();
     for (y_index=y; y_index<(y + 256); y_index++)
     {
         for (x_index=x; x_index<(x + 16); x_index++)
         {
-            uint16_t pic_temp = (uint16_t)((echo_use[x_index-x][y_index-y] / 11.0) * 65535);
-            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
-            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
-            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
-            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
-            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
-            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
-            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
-            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
-            atk_md0280_fsmc_write_dat(linear_to_rgb565(pic_temp));
+            int i_tmp;
+            i_tmp = i;
+            uint16_t pic_temp = (uint16_t)echo_use[x_index-x][y_index-y];
+            uint16_t rgb_temp = linear_to_rgb565(pic_temp);
+            while(i_tmp>0)
+            {
+                atk_md0280_fsmc_write_dat(rgb_temp);
+                i_tmp--;
+            }
         }
     }
 }

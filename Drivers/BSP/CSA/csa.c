@@ -71,7 +71,7 @@ RadarRangeParams Get_radar_range_params(float32_t  Ymin, float32_t  Ymax, float3
     return radar_range_params;
 }
 
-void echo_init()
+void echo_init(void)
 {
     uint16_t i;
     for ( i = 0; i < 512; i++)
@@ -79,7 +79,7 @@ void echo_init()
     
             
             echo_use[2][i]=echo_x1[i];
-            echo_use[8][i]=echo_x1[i];
+            // echo_use[8][i]=echo_x1[i];
             echo_use[14][i]=echo_x1[i];
         /* code */
     }
@@ -354,6 +354,8 @@ void process_CSA1(void)
 				for(j=0;j<256;j++)
 				{
 						echo_use[i][j]=echo_use[i][j*2];
+                        echo_use[i][j]=log(echo_use[i][j]+1)*217/log(11);
+                        echo_use[i][j]=log(echo_use[i][j]+1)*45;
 				}
 				
     }
