@@ -280,7 +280,7 @@ uint8_t atk_mw8266d_join_ap(char *ssid, char *pwd)
     char cmd[64];
     
     sprintf(cmd, "AT+CWJAP=\"%s\",\"%s\"", ssid, pwd);
-    ret = atk_mw8266d_send_at_cmd(cmd, "WIFI GOT IP", 10000);
+    ret = atk_mw8266d_send_at_cmd(cmd, "WIFI GOT IP", 20000);
     if (ret == ATK_MW8266D_EOK)
     {
         return ATK_MW8266D_EOK;

@@ -1197,6 +1197,7 @@ void atk_md0280_show_pic(uint16_t x, uint16_t y, uint16_t width, uint16_t height
 {
     uint16_t x_index;
     uint16_t y_index;
+    uint8_t *pic_tmp = pic;
     
     if ((x + width > ATK_MD0280_LCD_WIDTH) || (y + height > ATK_MD0280_LCD_HEIGHT))
     {
@@ -1210,12 +1211,12 @@ void atk_md0280_show_pic(uint16_t x, uint16_t y, uint16_t width, uint16_t height
     {
         for (x_index=x; x_index<(x + width); x_index++)
         {
-            uint16_t pic_temp = *pic;
-            pic++;
-            pic_temp <<= 8;
-            pic_temp += *pic;
-            pic++;
-            atk_md0280_fsmc_write_dat(pic_temp);
+            uint16_t rgb_temp = *pic_tmp;
+            pic_tmp++;
+            rgb_temp <<= 8;
+            rgb_temp += *pic_tmp;
+            pic_tmp++;
+            atk_md0280_fsmc_write_dat(rgb_temp);
         }
     }
 }
