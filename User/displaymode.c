@@ -11,7 +11,7 @@
 #include "./BSP/KEY/key.h"
 #include "./SYSTEM/sys/sys.h"
 
-extern uint16_t year, month, day, hour, minute, second;
+extern uint16_t year, month, day, hour, minute, second, solar_term;
 extern uint16_t year_set, month_set, day_set, hour_set, minute_set, second_set;
 
 /*
@@ -36,6 +36,82 @@ void draw_date_bold(uint8_t x, uint8_t y)
     draw_date(x + 1, y);
     draw_date(x, y - 1);
     draw_date(x, y + 1);
+    switch(solar_term){
+        case 1:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "Lesser Cold", ATK_MD0280_LCD_FONT_16, ATK_MD0280_GBLUE);
+            break;
+        case 2:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "Greater Cold", ATK_MD0280_LCD_FONT_16, ATK_MD0280_GBLUE);
+            break;
+        case 3:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "the Beginning of Spring", ATK_MD0280_LCD_FONT_16, ATK_MD0280_GREEN);
+            break;
+        case 4:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "Rain Water", ATK_MD0280_LCD_FONT_16, ATK_MD0280_GREEN);
+            break;
+        case 5:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "the Waking of Insects", ATK_MD0280_LCD_FONT_16, ATK_MD0280_GREEN);
+            break;
+        case 6:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "the Spring Equinox", ATK_MD0280_LCD_FONT_16, ATK_MD0280_GREEN);
+            break;
+        case 7:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "Pure Brightness", ATK_MD0280_LCD_FONT_16, ATK_MD0280_GREEN);
+            break;
+        case 8:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "the Grain Rain", ATK_MD0280_LCD_FONT_16, ATK_MD0280_GREEN);
+            break;
+        case 9:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "the Beginning of Summer", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BRRED);
+            break;
+        case 10:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "Lesser Fullness of Grain", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BRRED);
+            break;
+        case 11:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "Grain in Beard", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BRRED);
+            break;
+        case 12:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "the Summer Solstice", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BRRED);
+            break;
+        case 13:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "Lesser Heat", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BRRED);
+            break;
+        case 14:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "Greater Heat", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BRRED);
+            break;
+        case 15:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "the Beginning of Autumn", ATK_MD0280_LCD_FONT_16, ATK_MD0280_YELLOW);
+            break;
+        case 16:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "the End of Heat", ATK_MD0280_LCD_FONT_16, ATK_MD0280_YELLOW);
+            break;
+        case 17:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "White Dew", ATK_MD0280_LCD_FONT_16, ATK_MD0280_YELLOW);
+            break;
+        case 18:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "the Autumn Equinox", ATK_MD0280_LCD_FONT_16, ATK_MD0280_YELLOW);
+            break;
+        case 19:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "Cold Dew", ATK_MD0280_LCD_FONT_16, ATK_MD0280_YELLOW);
+            break;
+        case 20:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "Frost's Descent", ATK_MD0280_LCD_FONT_16, ATK_MD0280_YELLOW);
+            break;
+        case 21:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "the Beginning of Winter", ATK_MD0280_LCD_FONT_16, ATK_MD0280_GBLUE);
+            break;
+        case 22:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "Lesser Snow", ATK_MD0280_LCD_FONT_16, ATK_MD0280_GBLUE);
+            break;
+        case 23:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "Greater Snow", ATK_MD0280_LCD_FONT_16, ATK_MD0280_GBLUE);
+            break;
+        case 24:
+            atk_md0280_show_string(x - 40, y - 20, ATK_MD0280_LCD_WIDTH, 16, "the Winter Solstice", ATK_MD0280_LCD_FONT_16, ATK_MD0280_GBLUE);
+            break;
+
+
+    }
 }
 
 /*
@@ -72,7 +148,7 @@ void display_main(void)
     //如果日期发生变化，清除原来的日期
     if(year_tmp != year || month_tmp != month || day_tmp != day)
     {
-        atk_md0280_fill(86, 100, 152, 158, ATK_MD0280_BLACK);
+        atk_md0280_fill(20, 50, 160, 158, ATK_MD0280_BLACK);
         year_tmp = year;
         month_tmp = month;
         day_tmp = day;

@@ -26,7 +26,7 @@
 #include "./BSP/TIMER/btim.h"
 #include "./SYSTEM/date/date.h"
 
-extern uint16_t year, month, day, hour, minute, second;
+extern uint16_t year, month, day, hour, minute, second, solar_term;
 
 TIM_HandleTypeDef g_timx_handle;  /* 定时器句柄 */
 
@@ -88,10 +88,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if (htim->Instance == BTIM_TIMX_INT)
     {
-        updateTime(&year, &month, &day, &hour, &minute, &second);
+        updateTime(&year, &month, &day, &hour, &minute, &second, &solar_term);
     }
 }
-
-
-
 

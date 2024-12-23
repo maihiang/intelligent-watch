@@ -23,7 +23,7 @@ mode可取0-5
 int mode = 0;
 int next_mode = 0;
 //定义全局变量，表示日期时间
-uint16_t year = 2024, month = 12, day = 25, hour = 23, minute = 59, second = 50;
+uint16_t year = 2024, month = 12, day = 25, hour = 23, minute = 59, second = 50, solar_term = 0;
 //定义全局变量，表示设置界面中的日期和时间
 uint16_t year_set, month_set, day_set, hour_set, minute_set, second_set;
 
@@ -473,7 +473,7 @@ static void demo_show_ui(void)
 
         //显示DHT11界面
         case 11:
-            DHT11_Init();	//DHT11初始化	
+            DHT11_Init();	//DHT11初始化
 
             delay_ms(200);
 						delay_ms(200);
@@ -558,7 +558,7 @@ void demo_run(void)
     atk_md0280_clear(ATK_MD0280_BLACK);
 
     /* 初始化日期 */
-    year = 2024, month = 12, day = 31, hour = 23, minute = 59, second = 40;
+    year = 2024, month = 12, day = 31, hour = 23, minute = 59, second = 40, solar_term = 0;
 
 
     while (1)
