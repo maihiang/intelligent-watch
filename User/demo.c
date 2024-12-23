@@ -78,7 +78,7 @@ static void demo_show_ui(void)
             if ((x_scan >= 129)&&(x_scan <= 219)&&(y_scan >= 130)&&(y_scan <= 170))
             {
                 next_mode = 12;
-                atk_md0280_clear(ATK_MD0280_BLACK);
+                atk_md0280_clear(ATK_MD0280_WHITE);
             }
             //核心算法按钮响应
             if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 180)&&(y_scan <= 220))

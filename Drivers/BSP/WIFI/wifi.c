@@ -1,5 +1,5 @@
 #include "wifi.h"
-#include "img.h"
+#include "img_wifi.h"
 #include "./BSP/ATK_MD0280/atk_md0280.h"
 #include "./BSP/ATK_MW8266D/atk_mw8266d.h"
 #include "./BSP/KEY/key.h"
@@ -19,6 +19,9 @@ static void demo_key0_fun(uint8_t is_unvarnished);
 static void demo_key1_fun(uint8_t *is_unvarnished);
 static void demo_upload_data(uint8_t is_unvarnished);
 
+// 引用外部变量，显示日期
+extern uint16_t year, month, day, hour, minute, second;
+
 // 定义静态全局变量，标志是否已经连接WIFI
 static int t = 0;
 // 定义天气的状态
@@ -32,10 +35,13 @@ void display_WIFI(void)
     static char ip_buf[16];
     static uint8_t key;
     static uint8_t is_unvarnished;
+    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo_re);// 左上角返回按钮
     if (t == 0)
     {
         is_unvarnished = 0;
         /* 初始化ATK-MW8266D模块 */
+        atk_md0280_show_string(30, 130, ATK_MD0280_LCD_WIDTH, 24, "WIFI connecting", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
+
         ret = atk_mw8266d_init(115200);
         if (ret != 0)
         {
@@ -93,8 +99,39 @@ void display_WIFI(void)
         atk_mw8266d_uart_rx_restart();
 
         t++;
+
+        atk_md0280_clear(ATK_MD0280_WHITE);
     }
-    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo_re);                                                           // 左上角返回按钮
+    
+
+    atk_md0280_show_string(25, 80, ATK_MD0280_LCD_WIDTH, 24, "Weather Forecast", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
+    atk_md0280_draw_rect(20, 75, 220, 115, ATK_MD0280_BLACK);//最上方的矩形
+
+    atk_md0280_show_xnum(40, 250, year, 4, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_12, ATK_MD0280_BLACK);
+    atk_md0280_show_char(64, 250, '-', ATK_MD0280_LCD_FONT_12, ATK_MD0280_BLACK);
+    atk_md0280_show_xnum(70, 250, month, 2, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_12, ATK_MD0280_BLACK);
+    atk_md0280_show_char(82, 250, '-', ATK_MD0280_LCD_FONT_12, ATK_MD0280_BLACK);
+    atk_md0280_show_xnum(88, 250, day, 2, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_12, ATK_MD0280_BLACK);
+    atk_md0280_draw_rect(20, 115, 115, 280, ATK_MD0280_BLACK);//左下方的矩形
+
+    atk_md0280_show_string(125, 120, ATK_MD0280_LCD_WIDTH, 16, "Temperature", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BLACK);
+    atk_md0280_draw_rect(115, 115, 220, 145, ATK_MD0280_BLACK);//温度的矩形
+    atk_md0280_draw_rect(115, 145, 220, 210, ATK_MD0280_BLACK);//最高温度的矩形
+    atk_md0280_show_string(120, 150, ATK_MD0280_LCD_WIDTH, 16, "Max", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BLACK);
+
+    atk_md0280_show_string(190, 180, ATK_MD0280_LCD_WIDTH, 24, "C", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
+    atk_md0280_draw_circle(190, 182, 2, ATK_MD0280_BLACK);
+    atk_md0280_draw_rect(115, 210, 220, 280, ATK_MD0280_BLACK);//最低温度的矩形
+    atk_md0280_show_string(120, 215, ATK_MD0280_LCD_WIDTH, 16, "Min", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BLACK);
+
+    atk_md0280_show_string(190, 245, ATK_MD0280_LCD_WIDTH, 24, "C", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
+    atk_md0280_draw_circle(190, 247, 2, ATK_MD0280_BLACK);
+
+    // atk_md0280_show_string(40, 210, ATK_MD0280_LCD_WIDTH, 24, "Sunny", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
+    // atk_md0280_show_pic(45, 150, 50, 50, (uint8_t *)sunny_logo);
+    // atk_md0280_show_string(150, 165, ATK_MD0280_LCD_WIDTH, 32, "30", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
+    // atk_md0280_show_string(150, 230, ATK_MD0280_LCD_WIDTH, 32, "20", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
+
 
     key = key_scan(0);
 
@@ -205,97 +242,80 @@ static void demo_upload_data(uint8_t is_unvarnished)
         if (buf != NULL)
         {
             printf("%s", buf);
-            //如果buf收到的是"1"，则在屏幕上显示“rainy”
+            //如果buf收到的是"1"，则在屏幕上显示“Sunny”
             if (buf[0] == '1')
             {
                 if(weather != 1)
                 {
-                    atk_md0280_fill(20, 180, 220, 220, ATK_MD0280_BLACK);
                     weather = 1;
-                    atk_md0280_show_string(20, 180, ATK_MD0280_LCD_WIDTH, 16, "rainy", ATK_MD0280_LCD_FONT_16, ATK_MD0280_MAGENTA);
+                    atk_md0280_clear(ATK_MD0280_WHITE);
+                    atk_md0280_show_string(40, 210, ATK_MD0280_LCD_WIDTH, 24, "Sunny", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
+                    atk_md0280_show_pic(60, 170, 20, 20, (uint8_t *)sunny_logo);
+                    atk_md0280_show_string(150, 165, ATK_MD0280_LCD_WIDTH, 32, "30", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
+                    atk_md0280_show_string(150, 230, ATK_MD0280_LCD_WIDTH, 32, "20", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
                 }
             }
-            //如果buf收到的是"2"，则在屏幕上显示“sunny”
+            //如果buf收到的是"2"，则在屏幕上显示“Rainy”
             else if (buf[0] == '2')
             {
                 if(weather != 2)
                 {
-                    atk_md0280_fill(20, 180, 220, 220, ATK_MD0280_BLACK);
                     weather = 2;
-                    atk_md0280_show_string(20, 180, ATK_MD0280_LCD_WIDTH, 16, "sunny", ATK_MD0280_LCD_FONT_16, ATK_MD0280_MAGENTA);
+                    atk_md0280_clear(ATK_MD0280_WHITE);
+                    atk_md0280_show_string(40, 210, ATK_MD0280_LCD_WIDTH, 24, "Rainy", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
+                    atk_md0280_show_pic(60, 170, 20, 20, (uint8_t *)rainy_logo);
+                    atk_md0280_show_string(150, 165, ATK_MD0280_LCD_WIDTH, 32, "15", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
+                    atk_md0280_show_string(150, 230, ATK_MD0280_LCD_WIDTH, 32, "05", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
                 }
             }
-            //如果buf收到的是"3"，则在屏幕上显示“cloudy”
+            //如果buf收到的是"3"，则在屏幕上显示“Cloudy”
             else if (buf[0] == '3')
             {
                 if(weather != 3)
                 {
-                    atk_md0280_fill(20, 180, 220, 220, ATK_MD0280_BLACK);
                     weather = 3;
-                    atk_md0280_show_string(20, 180, ATK_MD0280_LCD_WIDTH, 16, "cloudy", ATK_MD0280_LCD_FONT_16, ATK_MD0280_MAGENTA);
+                    atk_md0280_clear(ATK_MD0280_WHITE);
+                    atk_md0280_show_string(40, 210, ATK_MD0280_LCD_WIDTH, 24, "Cloudy", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
+                    atk_md0280_show_pic(60, 170, 20, 20, (uint8_t *)cloudy_logo);
+                    atk_md0280_show_string(150, 165, ATK_MD0280_LCD_WIDTH, 32, "25", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
+                    atk_md0280_show_string(150, 230, ATK_MD0280_LCD_WIDTH, 32, "15", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
                 }
             }
-            //如果buf收到的是"4"，则在屏幕上显示“snowy”
+            //如果buf收到的是"4"，则在屏幕上显示“Snowy”
             else if (buf[0] == '4')
             {
                 if(weather != 4)
                 {
-                    atk_md0280_fill(20, 180, 220, 220, ATK_MD0280_BLACK);
                     weather = 4;
-                    atk_md0280_show_string(20, 180, ATK_MD0280_LCD_WIDTH, 16, "snowy", ATK_MD0280_LCD_FONT_16, ATK_MD0280_MAGENTA);
+                    atk_md0280_clear(ATK_MD0280_WHITE);
+                    atk_md0280_show_string(40, 210, ATK_MD0280_LCD_WIDTH, 24, "Snowy", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
+                    atk_md0280_show_pic(60, 170, 20, 20, (uint8_t *)snowy_logo);
+                    atk_md0280_show_string(150, 165, ATK_MD0280_LCD_WIDTH, 32, "05", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
+                    atk_md0280_show_string(150, 230, ATK_MD0280_LCD_WIDTH, 32, "-5", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
                 }
             }
-            //如果buf收到的是"5"，则在屏幕上显示“windy”
+            //如果buf收到的是"5"，则在屏幕上显示“Thunder”
             else if (buf[0] == '5')
             {
                 if(weather != 5)
                 {
-                    atk_md0280_fill(20, 180, 220, 220, ATK_MD0280_BLACK);
                     weather = 5;
-                    atk_md0280_show_string(20, 180, ATK_MD0280_LCD_WIDTH, 16, "windy", ATK_MD0280_LCD_FONT_16, ATK_MD0280_MAGENTA);
+                    atk_md0280_clear(ATK_MD0280_WHITE);
+                    atk_md0280_show_string(30, 210, ATK_MD0280_LCD_WIDTH, 24, "Thunder", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
+                    atk_md0280_show_pic(60, 170, 20, 20, (uint8_t *)thunder_logo);
+                    atk_md0280_show_string(150, 165, ATK_MD0280_LCD_WIDTH, 32, "10", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
+                    atk_md0280_show_string(150, 230, ATK_MD0280_LCD_WIDTH, 32, "05", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
                 }
             }
-            //如果buf收到的是"6"，则在屏幕上显示“foggy”
-            else if (buf[0] == '6')
+            //如果buf收到的是其他的，则清空显示
+            else
             {
-                if(weather != 6)
+                if (weather != 0)
                 {
-                    atk_md0280_fill(20, 180, 220, 220, ATK_MD0280_BLACK);
-                    weather = 6;
-                    atk_md0280_show_string(20, 180, ATK_MD0280_LCD_WIDTH, 16, "foggy", ATK_MD0280_LCD_FONT_16, ATK_MD0280_CYAN);
+                    weather = 0;
+                    atk_md0280_clear(ATK_MD0280_WHITE);
                 }
             }
-            //如果buf收到的是"7"，则在屏幕上显示“thunder”
-            else if (buf[0] == '7')
-            {
-                if(weather != 7)
-                {
-                    atk_md0280_fill(20, 180, 220, 220, ATK_MD0280_BLACK);
-                    weather = 7;
-                    atk_md0280_show_string(20, 180, ATK_MD0280_LCD_WIDTH, 16, "thunder", ATK_MD0280_LCD_FONT_16, ATK_MD0280_CYAN);
-                }
-            }
-            //如果buf收到的是"8"，则在屏幕上显示“hail”
-            else if (buf[0] == '8')
-            {
-                if(weather != 8)
-                {
-                    atk_md0280_fill(20, 180, 220, 220, ATK_MD0280_BLACK);
-                    weather = 8;
-                    atk_md0280_show_string(20, 180, ATK_MD0280_LCD_WIDTH, 16, "hail", ATK_MD0280_LCD_FONT_16, ATK_MD0280_CYAN);
-                }
-            }
-            //如果buf收到的是"9"，则在屏幕上显示“tornado”
-            else if (buf[0] == '9')
-            {
-                if(weather != 9)
-                {
-                    atk_md0280_fill(20, 180, 220, 220, ATK_MD0280_BLACK);
-                    weather = 9;
-                    atk_md0280_show_string(20, 180, ATK_MD0280_LCD_WIDTH, 16, "tornado", ATK_MD0280_LCD_FONT_16, ATK_MD0280_CYAN);
-                }
-            }
-
             /* 重开开始接收来自ATK-MW8266D UART的数据 */
             atk_mw8266d_uart_rx_restart();
         }
