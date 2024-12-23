@@ -17,7 +17,7 @@
 *.hex
 *.bin
 *.Bak
-*.sct
+# *.sct
 *.scvd
 
 #Keil Project screen layout file
