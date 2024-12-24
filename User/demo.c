@@ -13,8 +13,6 @@
 #include "math.h"
 #include "arm_math.h"
 
-// #define PI (float)(3.1415926)
-
 /*
 模式相关全局变量
 mode可取0-5
@@ -69,19 +67,19 @@ static void demo_show_ui(void)
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
             // DHT11按钮相应
-            if ((x_scan >= 20) && (x_scan <= 110) && (y_scan >= 130) && (y_scan <= 170))
+            if ((x_scan >= 20) && (x_scan <= 219) && (y_scan >= 130) && (y_scan <= 170))
             {
                 next_mode = 11;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
             // WIFI按钮相应
-            if ((x_scan >= 129) && (x_scan <= 219) && (y_scan >= 130) && (y_scan <= 170))
+            if ((x_scan >= 20) && (x_scan <= 219) && (y_scan >= 180) && (y_scan <= 220))
             {
                 next_mode = 12;
                 atk_md0280_clear(ATK_MD0280_WHITE);
             }
             // 核心算法按钮响应
-            if ((x_scan >= 20) && (x_scan <= 110) && (y_scan >= 180) && (y_scan <= 220))
+            if ((x_scan >= 20) && (x_scan <= 219) && (y_scan >= 230) && (y_scan <= 270))
             {
                 next_mode = 13;
                 atk_md0280_clear(ATK_MD0280_BLACK);
@@ -475,8 +473,7 @@ static void demo_show_ui(void)
     case 11:
         DHT11_Init(); // DHT11初始化
 
-        delay_ms(200);
-        delay_ms(200);
+        delay_ms(400);
 
         display_DHT11();
         break;

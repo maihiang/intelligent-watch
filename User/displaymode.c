@@ -189,14 +189,14 @@ void display_menu(void)
     atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo);
     draw_menu_logo(95, 60);
     // 在屏幕上显示DHT11功能按钮
-    atk_md0280_draw_rect(20, 130, 110, 170, ATK_MD0280_WHITE);
-    atk_md0280_show_string(30, 135, ATK_MD0280_LCD_WIDTH, 32, "DHT11", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    atk_md0280_draw_rect(20, 130, 219, 170, ATK_MD0280_WHITE);
+    atk_md0280_show_string(30, 135, ATK_MD0280_LCD_WIDTH, 32, "Temp/Humid", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
     // 在屏幕上显示WIFI模块功能按钮
-    atk_md0280_draw_rect(129, 130, 219, 170, ATK_MD0280_WHITE);
-    atk_md0280_show_string(139, 135, ATK_MD0280_LCD_WIDTH, 32, "WIFI", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    atk_md0280_draw_rect(20, 180, 219, 220, ATK_MD0280_WHITE);
+    atk_md0280_show_string(30, 185, ATK_MD0280_LCD_WIDTH, 32, "Weather", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
     // 在屏幕上显示核心算法功能按钮
-    atk_md0280_draw_rect(20, 180, 110, 220, ATK_MD0280_WHITE);
-    atk_md0280_show_string(30, 185, ATK_MD0280_LCD_WIDTH, 32, "CORE", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
+    atk_md0280_draw_rect(20, 230, 219, 270, ATK_MD0280_WHITE);
+    atk_md0280_show_string(30, 235, ATK_MD0280_LCD_WIDTH, 32, "Radar Image", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE);
 }
 
 /*
