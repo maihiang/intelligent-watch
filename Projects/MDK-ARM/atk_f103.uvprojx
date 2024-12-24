@@ -474,6 +474,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Drivers\BSP\CSA\csa.c</FilePath>
             </File>
+            <File>
+              <FileName>fft.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\Drivers\BSP\CSA\fft.s</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
