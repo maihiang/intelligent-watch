@@ -68,6 +68,6 @@ void azimuthcomp_process(float32_t signal_x[][512],float32_t* R,float32_t* Cs_f,
 
 void process_CSA1(void);
 
-extern void fftshift();
-extern void echo_init();
+extern void fftshift(void);
+extern void echo_init(void);
 #endif

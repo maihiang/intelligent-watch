@@ -254,5 +254,6 @@ DHT11_Init
     BL DHT11_Check
     POP {R0-R7,LR}
     BX LR
+    NOP
     END
 

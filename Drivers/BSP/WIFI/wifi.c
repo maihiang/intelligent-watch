@@ -14,7 +14,6 @@
 #define DEMO_TCP_SERVER_PORT "8008"
 
 // 声明display_WIFI函数中需要的函数
-static void demo_show_ip(char *buf);
 static void demo_key0_fun(uint8_t is_unvarnished);
 static void demo_key1_fun(uint8_t *is_unvarnished);
 static void demo_upload_data(uint8_t is_unvarnished);

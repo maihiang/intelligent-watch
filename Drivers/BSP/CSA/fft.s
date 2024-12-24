@@ -155,4 +155,5 @@ loop_i_echo_init
 end_loop_i_echo_init
     POP {R0-R7,LR}
     BX LR
+    NOP
     END
