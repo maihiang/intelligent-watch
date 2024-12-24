@@ -31,8 +31,8 @@
 static void atk_md0280_touch_spi_write(uint8_t dat)
 {
     uint8_t dat_index;
-    
-    for (dat_index=0; dat_index<8; dat_index++)
+
+    for (dat_index = 0; dat_index < 8; dat_index++)
     {
         if ((dat & 0x80) != 0)
         {
@@ -42,7 +42,7 @@ static void atk_md0280_touch_spi_write(uint8_t dat)
         {
             ATK_MD0280_TOUCH_SPI_MO(0);
         }
-        
+
         dat <<= 1;
         ATK_MD0280_TOUCH_SPI_CLK(0);
         delay_us(1);
@@ -58,39 +58,39 @@ static void atk_md0280_touch_spi_write(uint8_t dat)
 void atk_md0280_touch_spi_init(void)
 {
     GPIO_InitTypeDef gpio_init_struct = {0};
-    
+
     /* 使能时钟 */
     ATK_MD0280_TOUCH_SPI_MI_GPIO_CLK_ENABLE();
     ATK_MD0280_TOUCH_SPI_MO_GPIO_CLK_ENABLE();
     ATK_MD0280_TOUCH_SPI_TCS_GPIO_CLK_ENABLE();
     ATK_MD0280_TOUCH_SPI_CLK_GPIO_CLK_ENABLE();
-    
+
     /* 初始化MI引脚 */
-    gpio_init_struct.Pin    = ATK_MD0280_TOUCH_SPI_MI_GPIO_PIN;
-    gpio_init_struct.Mode   = GPIO_MODE_INPUT;
-    gpio_init_struct.Pull   = GPIO_PULLUP;
-    gpio_init_struct.Speed  = GPIO_SPEED_FREQ_HIGH;
+    gpio_init_struct.Pin = ATK_MD0280_TOUCH_SPI_MI_GPIO_PIN;
+    gpio_init_struct.Mode = GPIO_MODE_INPUT;
+    gpio_init_struct.Pull = GPIO_PULLUP;
+    gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(ATK_MD0280_TOUCH_SPI_MI_GPIO_PORT, &gpio_init_struct);
-    
+
     /* 初始化MO引脚 */
-    gpio_init_struct.Pin    = ATK_MD0280_TOUCH_SPI_MO_GPIO_PIN;
-    gpio_init_struct.Mode   = GPIO_MODE_OUTPUT_PP;
-    gpio_init_struct.Pull   = GPIO_PULLUP;
-    gpio_init_struct.Speed  = GPIO_SPEED_FREQ_HIGH;
+    gpio_init_struct.Pin = ATK_MD0280_TOUCH_SPI_MO_GPIO_PIN;
+    gpio_init_struct.Mode = GPIO_MODE_OUTPUT_PP;
+    gpio_init_struct.Pull = GPIO_PULLUP;
+    gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(ATK_MD0280_TOUCH_SPI_MO_GPIO_PORT, &gpio_init_struct);
-    
+
     /* 初始化TCS引脚 */
-    gpio_init_struct.Pin    = ATK_MD0280_TOUCH_SPI_TCS_GPIO_PIN;
-    gpio_init_struct.Mode   = GPIO_MODE_OUTPUT_PP;
-    gpio_init_struct.Pull   = GPIO_PULLUP;
-    gpio_init_struct.Speed  = GPIO_SPEED_FREQ_HIGH;
+    gpio_init_struct.Pin = ATK_MD0280_TOUCH_SPI_TCS_GPIO_PIN;
+    gpio_init_struct.Mode = GPIO_MODE_OUTPUT_PP;
+    gpio_init_struct.Pull = GPIO_PULLUP;
+    gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(ATK_MD0280_TOUCH_SPI_TCS_GPIO_PORT, &gpio_init_struct);
-    
+
     /* 初始化CLK引脚 */
-    gpio_init_struct.Pin    = ATK_MD0280_TOUCH_SPI_CLK_GPIO_PIN;
-    gpio_init_struct.Mode   = GPIO_MODE_OUTPUT_PP;
-    gpio_init_struct.Pull   = GPIO_PULLUP;
-    gpio_init_struct.Speed  = GPIO_SPEED_FREQ_HIGH;
+    gpio_init_struct.Pin = ATK_MD0280_TOUCH_SPI_CLK_GPIO_PIN;
+    gpio_init_struct.Mode = GPIO_MODE_OUTPUT_PP;
+    gpio_init_struct.Pull = GPIO_PULLUP;
+    gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(ATK_MD0280_TOUCH_SPI_CLK_GPIO_PORT, &gpio_init_struct);
 }
 
@@ -103,7 +103,7 @@ uint16_t atk_md0280_touch_spi_read(uint8_t cmd)
 {
     uint16_t dat = 0;
     uint8_t dat_index;
-    
+
     ATK_MD0280_TOUCH_SPI_CLK(0);
     ATK_MD0280_TOUCH_SPI_MO(0);
     ATK_MD0280_TOUCH_SPI_TCS(0);
@@ -114,8 +114,8 @@ uint16_t atk_md0280_touch_spi_read(uint8_t cmd)
     ATK_MD0280_TOUCH_SPI_CLK(1);
     delay_us(1);
     ATK_MD0280_TOUCH_SPI_CLK(0);
-    
-    for (dat_index=0; dat_index<16; dat_index++)
+
+    for (dat_index = 0; dat_index < 16; dat_index++)
     {
         dat <<= 1;
         ATK_MD0280_TOUCH_SPI_CLK(0);
@@ -126,10 +126,10 @@ uint16_t atk_md0280_touch_spi_read(uint8_t cmd)
             dat++;
         }
     }
-    
+
     dat >>= 4;
     ATK_MD0280_TOUCH_SPI_TCS(1);
-    
+
     return dat;
 }
 

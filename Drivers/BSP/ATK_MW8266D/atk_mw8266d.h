@@ -25,21 +25,26 @@
 #include "./BSP/ATK_MW8266D/atk_mw8266d_uart.h"
 
 /* 引脚定义 */
-#define ATK_MW8266D_RST_GPIO_PORT           GPIOA
-#define ATK_MW8266D_RST_GPIO_PIN            GPIO_PIN_4
-#define ATK_MW8266D_RST_GPIO_CLK_ENABLE()   do{ __HAL_RCC_GPIOA_CLK_ENABLE(); }while(0) /* PA口时钟使能 */
+#define ATK_MW8266D_RST_GPIO_PORT GPIOA
+#define ATK_MW8266D_RST_GPIO_PIN GPIO_PIN_4
+#define ATK_MW8266D_RST_GPIO_CLK_ENABLE() \
+    do                                    \
+    {                                     \
+        __HAL_RCC_GPIOA_CLK_ENABLE();     \
+    } while (0) /* PA口时钟使能 */
 
 /* IO操作 */
-#define ATK_MW8266D_RST(x)                  do{ x ?                                                                                     \
-                                                HAL_GPIO_WritePin(ATK_MW8266D_RST_GPIO_PORT, ATK_MW8266D_RST_GPIO_PIN, GPIO_PIN_SET) :  \
-                                                HAL_GPIO_WritePin(ATK_MW8266D_RST_GPIO_PORT, ATK_MW8266D_RST_GPIO_PIN, GPIO_PIN_RESET); \
-                                            }while(0)
+#define ATK_MW8266D_RST(x)                                                                                                                                                                 \
+    do                                                                                                                                                                                     \
+    {                                                                                                                                                                                      \
+        x ? HAL_GPIO_WritePin(ATK_MW8266D_RST_GPIO_PORT, ATK_MW8266D_RST_GPIO_PIN, GPIO_PIN_SET) : HAL_GPIO_WritePin(ATK_MW8266D_RST_GPIO_PORT, ATK_MW8266D_RST_GPIO_PIN, GPIO_PIN_RESET); \
+    } while (0)
 
 /* 错误代码 */
-#define ATK_MW8266D_EOK         0   /* 没有错误 */
-#define ATK_MW8266D_ERROR       1   /* 通用错误 */
-#define ATK_MW8266D_ETIMEOUT    2   /* 超时错误 */
-#define ATK_MW8266D_EINVAL      3   /* 参数错误 */
+#define ATK_MW8266D_EOK 0      /* 没有错误 */
+#define ATK_MW8266D_ERROR 1    /* 通用错误 */
+#define ATK_MW8266D_ETIMEOUT 2 /* 超时错误 */
+#define ATK_MW8266D_EINVAL 3   /* 参数错误 */
 
 /* 操作函数 */
 void atk_mw8266d_hw_reset(void);                                            /* ATK-MW8266D硬件复位 */

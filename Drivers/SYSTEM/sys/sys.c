@@ -24,7 +24,6 @@
 
 #include "./SYSTEM/sys/sys.h"
 
-
 /**
  * @brief       设置中断向量表偏移地址
  * @param       baseaddr: 基址
@@ -75,7 +74,7 @@ void sys_intx_enable(void)
  */
 void sys_msr_msp(uint32_t addr)
 {
-    __set_MSP(addr);    /* 设置栈顶地址 */
+    __set_MSP(addr); /* 设置栈顶地址 */
 }
 
 /**
@@ -111,31 +110,31 @@ void sys_stm32_clock_init(uint32_t plln)
     RCC_OscInitTypeDef rcc_oscinitstructure;
     RCC_ClkInitTypeDef rcc_clkinitstructure;
 
-    rcc_oscinitstructure.OscillatorType = RCC_OSCILLATORTYPE_HSE;       /* 外部高速时钟使能HSEON */
-    rcc_oscinitstructure.HSEState = RCC_HSE_ON;                         /* 打开HSE */
-    rcc_oscinitstructure.HSEPredivValue = RCC_HSE_PREDIV_DIV1;          /* HSE预分频 */
-    rcc_oscinitstructure.PLL.PLLState = RCC_PLL_ON;                     /* 打开PLL */
-    rcc_oscinitstructure.PLL.PLLSource = RCC_PLLSOURCE_HSE;             /* PLL时钟源选择HSE */
-    rcc_oscinitstructure.PLL.PLLMUL = plln;                             /* 主PLL倍频因子 */
-    ret = HAL_RCC_OscConfig(&rcc_oscinitstructure);                     /* 初始化 */
+    rcc_oscinitstructure.OscillatorType = RCC_OSCILLATORTYPE_HSE; /* 外部高速时钟使能HSEON */
+    rcc_oscinitstructure.HSEState = RCC_HSE_ON;                   /* 打开HSE */
+    rcc_oscinitstructure.HSEPredivValue = RCC_HSE_PREDIV_DIV1;    /* HSE预分频 */
+    rcc_oscinitstructure.PLL.PLLState = RCC_PLL_ON;               /* 打开PLL */
+    rcc_oscinitstructure.PLL.PLLSource = RCC_PLLSOURCE_HSE;       /* PLL时钟源选择HSE */
+    rcc_oscinitstructure.PLL.PLLMUL = plln;                       /* 主PLL倍频因子 */
+    ret = HAL_RCC_OscConfig(&rcc_oscinitstructure);               /* 初始化 */
 
     if (ret != HAL_OK)
     {
-        while (1);                                                      /* 时钟初始化72M失败，之后的程序将可能无法正常执行，可以在这里加入自己的处理 */
+        while (1)
+            ; /* 时钟初始化72M失败，之后的程序将可能无法正常执行，可以在这里加入自己的处理 */
     }
 
     /* 选中PLL作为系统时钟源并且配置HCLK,PCLK1和PCLK2*/
     rcc_clkinitstructure.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
-    rcc_clkinitstructure.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;        /* 设置系统时钟时钟源为PLL */
-    rcc_clkinitstructure.AHBCLKDivider = RCC_SYSCLK_DIV1;               /* AHB分频系数为1 */
-    rcc_clkinitstructure.APB1CLKDivider = RCC_HCLK_DIV2;                /* APB1分频系数为2 */
-    rcc_clkinitstructure.APB2CLKDivider = RCC_HCLK_DIV1;                /* APB2分频系数为1 */
-    ret = HAL_RCC_ClockConfig(&rcc_clkinitstructure, FLASH_LATENCY_2);  /* 同时设置FLASH延时周期为2WS，也就是3个CPU周期。 */
+    rcc_clkinitstructure.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;       /* 设置系统时钟时钟源为PLL */
+    rcc_clkinitstructure.AHBCLKDivider = RCC_SYSCLK_DIV1;              /* AHB分频系数为1 */
+    rcc_clkinitstructure.APB1CLKDivider = RCC_HCLK_DIV2;               /* APB1分频系数为2 */
+    rcc_clkinitstructure.APB2CLKDivider = RCC_HCLK_DIV1;               /* APB2分频系数为1 */
+    ret = HAL_RCC_ClockConfig(&rcc_clkinitstructure, FLASH_LATENCY_2); /* 同时设置FLASH延时周期为2WS，也就是3个CPU周期。 */
 
     if (ret != HAL_OK)
     {
-        while (1);                                                      /* 时钟初始化72M失败，之后的程序将可能无法正常执行，可以在这里加入自己的处理 */
+        while (1)
+            ; /* 时钟初始化72M失败，之后的程序将可能无法正常执行，可以在这里加入自己的处理 */
     }
 }
-
-

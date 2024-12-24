@@ -35,7 +35,7 @@ void display_WIFI(void)
     static char ip_buf[16];
     static uint8_t key;
     static uint8_t is_unvarnished;
-    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo_re);// 左上角返回按钮
+    atk_md0280_show_pic(5, 5, 50, 40, (uint8_t *)back_logo_re); // 左上角返回按钮
     if (t == 0)
     {
         is_unvarnished = 0;
@@ -55,19 +55,19 @@ void display_WIFI(void)
 
         /* 连接WIFI */
         printf("Joining to AP...\r\n");
-        ret = atk_mw8266d_restore();                               /* 恢复出厂设置 */
+        ret = atk_mw8266d_restore(); /* 恢复出厂设置 */
         delay_ms(1000);
-        ret += atk_mw8266d_at_test();                              /* AT测试 */
+        ret += atk_mw8266d_at_test(); /* AT测试 */
         delay_ms(1000);
-        ret += atk_mw8266d_set_mode(1);                            /* station模式 */
+        ret += atk_mw8266d_set_mode(1); /* station模式 */
         delay_ms(1000);
-        ret += atk_mw8266d_sw_reset();                             /* 软件复位 */
+        ret += atk_mw8266d_sw_reset(); /* 软件复位 */
         delay_ms(1000);
-        ret += atk_mw8266d_ate_config(0);                          /* 关闭回显功能 */
+        ret += atk_mw8266d_ate_config(0); /* 关闭回显功能 */
         delay_ms(1000);
         ret += atk_mw8266d_join_ap(DEMO_WIFI_SSID, DEMO_WIFI_PWD); /* 连接WIFI */
         delay_ms(1000);
-        ret += atk_mw8266d_get_ip(ip_buf);                         /* 获取IP地址 */
+        ret += atk_mw8266d_get_ip(ip_buf); /* 获取IP地址 */
         if (ret != 0)
         {
             printf("Error to join ap!\r\n");
@@ -78,8 +78,8 @@ void display_WIFI(void)
                 delay_ms(200);
             }
         }
-        //ap连接成功
-        // atk_md0280_show_string(30, 130, ATK_MD0280_LCD_WIDTH, 32, "2", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE); // 在屏幕上显示WIFI
+        // ap连接成功
+        //  atk_md0280_show_string(30, 130, ATK_MD0280_LCD_WIDTH, 32, "2", ATK_MD0280_LCD_FONT_32, ATK_MD0280_WHITE); // 在屏幕上显示WIFI
 
         /* 连接TCP服务器 */
         ret = atk_mw8266d_connect_tcp_server(DEMO_TCP_SERVER_IP, DEMO_TCP_SERVER_PORT);
@@ -102,26 +102,25 @@ void display_WIFI(void)
 
         atk_md0280_clear(ATK_MD0280_WHITE);
     }
-    
 
     atk_md0280_show_string(25, 80, ATK_MD0280_LCD_WIDTH, 24, "Weather Forecast", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
-    atk_md0280_draw_rect(20, 75, 220, 115, ATK_MD0280_BLACK);//最上方的矩形
+    atk_md0280_draw_rect(20, 75, 220, 115, ATK_MD0280_BLACK); // 最上方的矩形
 
     atk_md0280_show_xnum(40, 250, year, 4, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_12, ATK_MD0280_BLACK);
     atk_md0280_show_char(64, 250, '-', ATK_MD0280_LCD_FONT_12, ATK_MD0280_BLACK);
     atk_md0280_show_xnum(70, 250, month, 2, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_12, ATK_MD0280_BLACK);
     atk_md0280_show_char(82, 250, '-', ATK_MD0280_LCD_FONT_12, ATK_MD0280_BLACK);
     atk_md0280_show_xnum(88, 250, day, 2, ATK_MD0280_NUM_SHOW_ZERO, ATK_MD0280_LCD_FONT_12, ATK_MD0280_BLACK);
-    atk_md0280_draw_rect(20, 115, 115, 280, ATK_MD0280_BLACK);//左下方的矩形
+    atk_md0280_draw_rect(20, 115, 115, 280, ATK_MD0280_BLACK); // 左下方的矩形
 
     atk_md0280_show_string(125, 120, ATK_MD0280_LCD_WIDTH, 16, "Temperature", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BLACK);
-    atk_md0280_draw_rect(115, 115, 220, 145, ATK_MD0280_BLACK);//温度的矩形
-    atk_md0280_draw_rect(115, 145, 220, 210, ATK_MD0280_BLACK);//最高温度的矩形
+    atk_md0280_draw_rect(115, 115, 220, 145, ATK_MD0280_BLACK); // 温度的矩形
+    atk_md0280_draw_rect(115, 145, 220, 210, ATK_MD0280_BLACK); // 最高温度的矩形
     atk_md0280_show_string(120, 150, ATK_MD0280_LCD_WIDTH, 16, "Max", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BLACK);
 
     atk_md0280_show_string(190, 180, ATK_MD0280_LCD_WIDTH, 24, "C", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
     atk_md0280_draw_circle(190, 182, 2, ATK_MD0280_BLACK);
-    atk_md0280_draw_rect(115, 210, 220, 280, ATK_MD0280_BLACK);//最低温度的矩形
+    atk_md0280_draw_rect(115, 210, 220, 280, ATK_MD0280_BLACK); // 最低温度的矩形
     atk_md0280_show_string(120, 215, ATK_MD0280_LCD_WIDTH, 16, "Min", ATK_MD0280_LCD_FONT_16, ATK_MD0280_BLACK);
 
     atk_md0280_show_string(190, 245, ATK_MD0280_LCD_WIDTH, 24, "C", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
@@ -132,27 +131,26 @@ void display_WIFI(void)
     // atk_md0280_show_string(150, 165, ATK_MD0280_LCD_WIDTH, 32, "30", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
     // atk_md0280_show_string(150, 230, ATK_MD0280_LCD_WIDTH, 32, "20", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
 
-
     key = key_scan(0);
 
     switch (key)
     {
-        case KEY0_PRES:
-        {
-            /* 功能测试 */
-            demo_key0_fun(is_unvarnished);
-            break;
-        }
-        case KEY1_PRES:
-        {
-            /* 透传模式切换 */
-            demo_key1_fun(&is_unvarnished);
-            break;
-        }
-        default:
-        {
-            break;
-        }
+    case KEY0_PRES:
+    {
+        /* 功能测试 */
+        demo_key0_fun(is_unvarnished);
+        break;
+    }
+    case KEY1_PRES:
+    {
+        /* 透传模式切换 */
+        demo_key1_fun(&is_unvarnished);
+        break;
+    }
+    default:
+    {
+        break;
+    }
     }
 
     /* 发送透传接收自TCP Server的数据到串口调试助手 */
@@ -242,10 +240,10 @@ static void demo_upload_data(uint8_t is_unvarnished)
         if (buf != NULL)
         {
             printf("%s", buf);
-            //如果buf收到的是"1"，则在屏幕上显示“Sunny”
+            // 如果buf收到的是"1"，则在屏幕上显示“Sunny”
             if (buf[0] == '1')
             {
-                if(weather != 1)
+                if (weather != 1)
                 {
                     weather = 1;
                     atk_md0280_clear(ATK_MD0280_WHITE);
@@ -255,10 +253,10 @@ static void demo_upload_data(uint8_t is_unvarnished)
                     atk_md0280_show_string(150, 230, ATK_MD0280_LCD_WIDTH, 32, "20", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
                 }
             }
-            //如果buf收到的是"2"，则在屏幕上显示“Rainy”
+            // 如果buf收到的是"2"，则在屏幕上显示“Rainy”
             else if (buf[0] == '2')
             {
-                if(weather != 2)
+                if (weather != 2)
                 {
                     weather = 2;
                     atk_md0280_clear(ATK_MD0280_WHITE);
@@ -268,10 +266,10 @@ static void demo_upload_data(uint8_t is_unvarnished)
                     atk_md0280_show_string(150, 230, ATK_MD0280_LCD_WIDTH, 32, "05", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
                 }
             }
-            //如果buf收到的是"3"，则在屏幕上显示“Cloudy”
+            // 如果buf收到的是"3"，则在屏幕上显示“Cloudy”
             else if (buf[0] == '3')
             {
-                if(weather != 3)
+                if (weather != 3)
                 {
                     weather = 3;
                     atk_md0280_clear(ATK_MD0280_WHITE);
@@ -281,10 +279,10 @@ static void demo_upload_data(uint8_t is_unvarnished)
                     atk_md0280_show_string(150, 230, ATK_MD0280_LCD_WIDTH, 32, "15", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
                 }
             }
-            //如果buf收到的是"4"，则在屏幕上显示“Snowy”
+            // 如果buf收到的是"4"，则在屏幕上显示“Snowy”
             else if (buf[0] == '4')
             {
-                if(weather != 4)
+                if (weather != 4)
                 {
                     weather = 4;
                     atk_md0280_clear(ATK_MD0280_WHITE);
@@ -294,10 +292,10 @@ static void demo_upload_data(uint8_t is_unvarnished)
                     atk_md0280_show_string(150, 230, ATK_MD0280_LCD_WIDTH, 32, "-5", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
                 }
             }
-            //如果buf收到的是"5"，则在屏幕上显示“Thunder”
+            // 如果buf收到的是"5"，则在屏幕上显示“Thunder”
             else if (buf[0] == '5')
             {
-                if(weather != 5)
+                if (weather != 5)
                 {
                     weather = 5;
                     atk_md0280_clear(ATK_MD0280_WHITE);
@@ -307,7 +305,7 @@ static void demo_upload_data(uint8_t is_unvarnished)
                     atk_md0280_show_string(150, 230, ATK_MD0280_LCD_WIDTH, 32, "05", ATK_MD0280_LCD_FONT_32, ATK_MD0280_BLACK);
                 }
             }
-            //如果buf收到的是其他的，则清空显示
+            // 如果buf收到的是其他的，则清空显示
             else
             {
                 if (weather != 0)

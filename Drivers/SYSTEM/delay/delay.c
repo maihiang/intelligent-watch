@@ -26,8 +26,7 @@
 #include "./SYSTEM/sys/sys.h"
 #include "./SYSTEM/delay/delay.h"
 
-
-static uint16_t  g_fac_us = 0;      /* us延时倍乘数 */
+static uint16_t g_fac_us = 0; /* us延时倍乘数 */
 
 /* 如果SYS_SUPPORT_OS定义了,说明要支持OS了(不限于UCOS) */
 #if SYS_SUPPORT_OS
@@ -37,7 +36,6 @@ static uint16_t  g_fac_us = 0;      /* us延时倍乘数 */
 
 /* 定义g_fac_ms变量, 表示ms延时的倍乘数, 代表每个节拍的ms数, (仅在使能os的时候,需要用到) */
 static uint16_t g_fac_ms = 0;
-
 
 /*
  *  当delay_us/delay_ms需要支持OS的时候需要三个与OS相关的宏定义和函数来支持
@@ -54,19 +52,18 @@ static uint16_t g_fac_ms = 0;
  */
 
 /* 支持UCOSII */
-#ifdef  OS_CRITICAL_METHOD                      /* OS_CRITICAL_METHOD定义了,说明要支持UCOSII */
-#define delay_osrunning     OSRunning           /* OS是否运行标记,0,不运行;1,在运行 */
-#define delay_ostickspersec OS_TICKS_PER_SEC    /* OS时钟节拍,即每秒调度次数 */
-#define delay_osintnesting  OSIntNesting        /* 中断嵌套级别,即中断嵌套次数 */
+#ifdef OS_CRITICAL_METHOD                    /* OS_CRITICAL_METHOD定义了,说明要支持UCOSII */
+#define delay_osrunning OSRunning            /* OS是否运行标记,0,不运行;1,在运行 */
+#define delay_ostickspersec OS_TICKS_PER_SEC /* OS时钟节拍,即每秒调度次数 */
+#define delay_osintnesting OSIntNesting      /* 中断嵌套级别,即中断嵌套次数 */
 #endif
 
 /* 支持UCOSIII */
-#ifdef  CPU_CFG_CRITICAL_METHOD                 /* CPU_CFG_CRITICAL_METHOD定义了,说明要支持UCOSIII */
-#define delay_osrunning     OSRunning           /* OS是否运行标记,0,不运行;1,在运行 */
-#define delay_ostickspersec OSCfg_TickRate_Hz   /* OS时钟节拍,即每秒调度次数 */
-#define delay_osintnesting  OSIntNestingCtr     /* 中断嵌套级别,即中断嵌套次数 */
+#ifdef CPU_CFG_CRITICAL_METHOD                /* CPU_CFG_CRITICAL_METHOD定义了,说明要支持UCOSIII */
+#define delay_osrunning OSRunning             /* OS是否运行标记,0,不运行;1,在运行 */
+#define delay_ostickspersec OSCfg_TickRate_Hz /* OS时钟节拍,即每秒调度次数 */
+#define delay_osintnesting OSIntNestingCtr    /* 中断嵌套级别,即中断嵌套次数 */
 #endif
-
 
 /**
  * @brief       us级延时时,关闭任务调度(防止打断us级延迟)
@@ -75,11 +72,11 @@ static uint16_t g_fac_ms = 0;
  */
 static void delay_osschedlock(void)
 {
-#ifdef CPU_CFG_CRITICAL_METHOD  /* 使用UCOSIII */
+#ifdef CPU_CFG_CRITICAL_METHOD /* 使用UCOSIII */
     OS_ERR err;
-    OSSchedLock(&err);          /* UCOSIII的方式,禁止调度，防止打断us延时 */
-#else                           /* 否则UCOSII */
-    OSSchedLock();              /* UCOSII的方式,禁止调度，防止打断us延时 */
+    OSSchedLock(&err); /* UCOSIII的方式,禁止调度，防止打断us延时 */
+#else                  /* 否则UCOSII */
+    OSSchedLock(); /* UCOSII的方式,禁止调度，防止打断us延时 */
 #endif
 }
 
@@ -90,11 +87,11 @@ static void delay_osschedlock(void)
  */
 static void delay_osschedunlock(void)
 {
-#ifdef CPU_CFG_CRITICAL_METHOD  /* 使用UCOSIII */
+#ifdef CPU_CFG_CRITICAL_METHOD /* 使用UCOSIII */
     OS_ERR err;
-    OSSchedUnlock(&err);        /* UCOSIII的方式,恢复调度 */
-#else                           /* 否则UCOSII */
-    OSSchedUnlock();            /* UCOSII的方式,恢复调度 */
+    OSSchedUnlock(&err); /* UCOSIII的方式,恢复调度 */
+#else                    /* 否则UCOSII */
+    OSSchedUnlock(); /* UCOSII的方式,恢复调度 */
 #endif
 }
 
@@ -107,9 +104,9 @@ static void delay_ostimedly(uint32_t ticks)
 {
 #ifdef CPU_CFG_CRITICAL_METHOD
     OS_ERR err;
-    OSTimeDly(ticks, OS_OPT_TIME_PERIODIC, &err);   /* UCOSIII延时采用周期模式 */
+    OSTimeDly(ticks, OS_OPT_TIME_PERIODIC, &err); /* UCOSIII延时采用周期模式 */
 #else
-    OSTimeDly(ticks);                               /* UCOSII延时 */
+    OSTimeDly(ticks); /* UCOSII延时 */
 #endif
 }
 
@@ -120,11 +117,11 @@ static void delay_ostimedly(uint32_t ticks)
  */
 void SysTick_Handler(void)
 {
-    if (delay_osrunning == 1)   /* OS开始跑了,才执行正常的调度处理 */
+    if (delay_osrunning == 1) /* OS开始跑了,才执行正常的调度处理 */
     {
-        OSIntEnter();           /* 进入中断 */
-        OSTimeTick();           /* 调用ucos的时钟服务程序 */
-        OSIntExit();            /* 触发任务切换软中断 */
+        OSIntEnter(); /* 进入中断 */
+        OSTimeTick(); /* 调用ucos的时钟服务程序 */
+        OSIntExit();  /* 触发任务切换软中断 */
     }
     HAL_IncTick();
 }
@@ -140,23 +137,23 @@ void delay_init(uint16_t sysclk)
 #if SYS_SUPPORT_OS /* 如果需要支持OS. */
     uint32_t reload;
 #endif
-    SysTick->CTRL = 0;                                          /* 清Systick状态，以便下一步重设，如果这里开了中断会关闭其中断 */
-    HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK_DIV8);   /* SYSTICK使用内核时钟源8分频,因systick的计数器最大值只有2^24 */
+    SysTick->CTRL = 0;                                        /* 清Systick状态，以便下一步重设，如果这里开了中断会关闭其中断 */
+    HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK_DIV8); /* SYSTICK使用内核时钟源8分频,因systick的计数器最大值只有2^24 */
 
-    g_fac_us = sysclk / 8;                                      /* 不论是否使用OS,g_fac_us都需要使用,作为1us的基础时基 */
-#if SYS_SUPPORT_OS                                              /* 如果需要支持OS. */
-    reload = sysclk / 8;                                        /* 每秒钟的计数次数 单位为M */
-    reload *= 1000000 / delay_ostickspersec;                    /* 根据delay_ostickspersec设定溢出时间
-                                                                 * reload为24位寄存器,最大值:16777216,在9M下,约合1.86s左右
-                                                                 */
-    g_fac_ms = 1000 / delay_ostickspersec;                      /* 代表OS可以延时的最少单位 */
-    SysTick->CTRL |= 1 << 1;                                    /* 开启SYSTICK中断 */
-    SysTick->LOAD = reload;                                     /* 每1/delay_ostickspersec秒中断一次 */
-    SysTick->CTRL |= 1 << 0;                                    /* 开启SYSTICK */
+    g_fac_us = sysclk / 8;                   /* 不论是否使用OS,g_fac_us都需要使用,作为1us的基础时基 */
+#if SYS_SUPPORT_OS                           /* 如果需要支持OS. */
+    reload = sysclk / 8;                     /* 每秒钟的计数次数 单位为M */
+    reload *= 1000000 / delay_ostickspersec; /* 根据delay_ostickspersec设定溢出时间
+                                              * reload为24位寄存器,最大值:16777216,在9M下,约合1.86s左右
+                                              */
+    g_fac_ms = 1000 / delay_ostickspersec;   /* 代表OS可以延时的最少单位 */
+    SysTick->CTRL |= 1 << 1;                 /* 开启SYSTICK中断 */
+    SysTick->LOAD = reload;                  /* 每1/delay_ostickspersec秒中断一次 */
+    SysTick->CTRL |= 1 << 0;                 /* 开启SYSTICK */
 #endif
 }
 
-#if SYS_SUPPORT_OS  /* 如果需要支持OS, 用以下代码 */
+#if SYS_SUPPORT_OS /* 如果需要支持OS, 用以下代码 */
 
 /**
  * @brief       延时nus
@@ -169,10 +166,10 @@ void delay_us(uint32_t nus)
     uint32_t ticks;
     uint32_t told, tnow, tcnt = 0;
     uint32_t reload;
-    reload = SysTick->LOAD;     /* LOAD的值 */
-    ticks = nus * g_fac_us;     /* 需要的节拍数 */
-    delay_osschedlock();        /* 阻止OS调度，防止打断us延时 */
-    told = SysTick->VAL;        /* 刚进入时的计数器值 */
+    reload = SysTick->LOAD; /* LOAD的值 */
+    ticks = nus * g_fac_us; /* 需要的节拍数 */
+    delay_osschedlock();    /* 阻止OS调度，防止打断us延时 */
+    told = SysTick->VAL;    /* 刚进入时的计数器值 */
 
     while (1)
     {
@@ -182,7 +179,7 @@ void delay_us(uint32_t nus)
         {
             if (tnow < told)
             {
-                tcnt += told - tnow;    /* 这里注意一下SYSTICK是一个递减的计数器就可以了. */
+                tcnt += told - tnow; /* 这里注意一下SYSTICK是一个递减的计数器就可以了. */
             }
             else
             {
@@ -191,11 +188,12 @@ void delay_us(uint32_t nus)
 
             told = tnow;
 
-            if (tcnt >= ticks) break;   /* 时间超过/等于要延迟的时间,则退出. */
+            if (tcnt >= ticks)
+                break; /* 时间超过/等于要延迟的时间,则退出. */
         }
     }
 
-    delay_osschedunlock();              /* 恢复OS调度 */
+    delay_osschedunlock(); /* 恢复OS调度 */
 }
 
 /**
@@ -205,20 +203,20 @@ void delay_us(uint32_t nus)
  */
 void delay_ms(uint16_t nms)
 {
-    if (delay_osrunning && delay_osintnesting == 0)     /* 如果OS已经在跑了,并且不是在中断里面(中断里面不能任务调度) */
+    if (delay_osrunning && delay_osintnesting == 0) /* 如果OS已经在跑了,并且不是在中断里面(中断里面不能任务调度) */
     {
-        if (nms >= g_fac_ms)                            /* 延时的时间大于OS的最少时间周期 */
+        if (nms >= g_fac_ms) /* 延时的时间大于OS的最少时间周期 */
         {
-            delay_ostimedly(nms / g_fac_ms);            /* OS延时 */
+            delay_ostimedly(nms / g_fac_ms); /* OS延时 */
         }
 
-        nms %= g_fac_ms;                                /* OS已经无法提供这么小的延时了,采用普通方式延时 */
+        nms %= g_fac_ms; /* OS已经无法提供这么小的延时了,采用普通方式延时 */
     }
 
-    delay_us((uint32_t)(nms * 1000));                   /* 普通方式延时 */
+    delay_us((uint32_t)(nms * 1000)); /* 普通方式延时 */
 }
 
-#else  /* 不使用OS时, 用以下代码 */
+#else /* 不使用OS时, 用以下代码 */
 
 /**
  * @brief       延时nus
@@ -231,15 +229,15 @@ void delay_us(uint32_t nus)
     uint32_t temp;
     SysTick->LOAD = nus * g_fac_us; /* 时间加载 */
     SysTick->VAL = 0x00;            /* 清空计数器 */
-    SysTick->CTRL |= 1 << 0 ;       /* 开始倒数 */
+    SysTick->CTRL |= 1 << 0;        /* 开始倒数 */
 
     do
     {
         temp = SysTick->CTRL;
     } while ((temp & 0x01) && !(temp & (1 << 16))); /* CTRL.ENABLE位必须为1, 并等待时间到达 */
 
-    SysTick->CTRL &= ~(1 << 0) ;    /* 关闭SYSTICK */
-    SysTick->VAL = 0X00;            /* 清空计数器 */
+    SysTick->CTRL &= ~(1 << 0); /* 关闭SYSTICK */
+    SysTick->VAL = 0X00;        /* 清空计数器 */
 }
 
 /**
@@ -249,20 +247,20 @@ void delay_us(uint32_t nus)
  */
 void delay_ms(uint16_t nms)
 {
-    uint32_t repeat = nms / 1000;   /*  这里用1000,是考虑到可能有超频应用,
-                                     *  比如128Mhz的时候, delay_us最大只能延时1048576us左右了
-                                     */
+    uint32_t repeat = nms / 1000; /*  这里用1000,是考虑到可能有超频应用,
+                                   *  比如128Mhz的时候, delay_us最大只能延时1048576us左右了
+                                   */
     uint32_t remain = nms % 1000;
 
     while (repeat)
     {
-        delay_us(1000 * 1000);      /* 利用delay_us 实现 1000ms 延时 */
+        delay_us(1000 * 1000); /* 利用delay_us 实现 1000ms 延时 */
         repeat--;
     }
 
     if (remain)
     {
-        delay_us(remain * 1000);    /* 利用delay_us, 把尾数延时(remain ms)给做了 */
+        delay_us(remain * 1000); /* 利用delay_us, 把尾数延时(remain ms)给做了 */
     }
 }
 
@@ -274,40 +272,7 @@ void delay_ms(uint16_t nms)
   */
 void HAL_Delay(uint32_t Delay)
 {
-     delay_ms(Delay);
+    delay_ms(Delay);
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

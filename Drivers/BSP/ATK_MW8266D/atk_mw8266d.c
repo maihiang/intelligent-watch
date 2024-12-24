@@ -31,9 +31,9 @@
 static void atk_mw8266d_hw_init(void)
 {
     GPIO_InitTypeDef gpio_init_struct;
-    
+
     ATK_MW8266D_RST_GPIO_CLK_ENABLE();
-    
+
     gpio_init_struct.Pin = ATK_MW8266D_RST_GPIO_PIN;
     gpio_init_struct.Mode = GPIO_MODE_OUTPUT_PP;
     gpio_init_struct.Pull = GPIO_NOPULL;
@@ -65,10 +65,10 @@ void atk_mw8266d_hw_reset(void)
 uint8_t atk_mw8266d_send_at_cmd(char *cmd, char *ack, uint32_t timeout)
 {
     uint8_t *ret = NULL;
-    
+
     atk_mw8266d_uart_rx_restart();
     atk_mw8266d_uart_printf("%s\r\n", cmd);
-    
+
     if ((ack == NULL) || (timeout == 0))
     {
         return ATK_MW8266D_EOK;
@@ -92,7 +92,7 @@ uint8_t atk_mw8266d_send_at_cmd(char *cmd, char *ack, uint32_t timeout)
             timeout--;
             delay_ms(1);
         }
-        
+
         return ATK_MW8266D_ETIMEOUT;
     }
 }
@@ -105,14 +105,14 @@ uint8_t atk_mw8266d_send_at_cmd(char *cmd, char *ack, uint32_t timeout)
  */
 uint8_t atk_mw8266d_init(uint32_t baudrate)
 {
-    atk_mw8266d_hw_init();                          /* ATK-MW8266D硬件初始化 */
-    atk_mw8266d_hw_reset();                         /* ATK-MW8266D硬件复位 */
-    atk_mw8266d_uart_init(baudrate);                /* ATK-MW8266D UART初始化 */
-    if (atk_mw8266d_at_test() != ATK_MW8266D_EOK)   /* ATK-MW8266D AT指令测试 */
+    atk_mw8266d_hw_init();                        /* ATK-MW8266D硬件初始化 */
+    atk_mw8266d_hw_reset();                       /* ATK-MW8266D硬件复位 */
+    atk_mw8266d_uart_init(baudrate);              /* ATK-MW8266D UART初始化 */
+    if (atk_mw8266d_at_test() != ATK_MW8266D_EOK) /* ATK-MW8266D AT指令测试 */
     {
         return ATK_MW8266D_ERROR;
     }
-    
+
     return ATK_MW8266D_EOK;
 }
 
@@ -125,7 +125,7 @@ uint8_t atk_mw8266d_init(uint32_t baudrate)
 uint8_t atk_mw8266d_restore(void)
 {
     uint8_t ret;
-    
+
     ret = atk_mw8266d_send_at_cmd("AT+RESTORE", "ready", 3000);
     if (ret == ATK_MW8266D_EOK)
     {
@@ -147,8 +147,8 @@ uint8_t atk_mw8266d_at_test(void)
 {
     uint8_t ret;
     uint8_t i;
-    
-    for (i=0; i<10; i++)
+
+    for (i = 0; i < 10; i++)
     {
         ret = atk_mw8266d_send_at_cmd("AT", "OK", 500);
         if (ret == ATK_MW8266D_EOK)
@@ -156,7 +156,7 @@ uint8_t atk_mw8266d_at_test(void)
             return ATK_MW8266D_EOK;
         }
     }
-    
+
     return ATK_MW8266D_ERROR;
 }
 
@@ -172,30 +172,30 @@ uint8_t atk_mw8266d_at_test(void)
 uint8_t atk_mw8266d_set_mode(uint8_t mode)
 {
     uint8_t ret;
-    
+
     switch (mode)
     {
-        case 1:
-        {
-            ret = atk_mw8266d_send_at_cmd("AT+CWMODE=1", "OK", 500);    /* Station模式 */
-            break;
-        }
-        case 2:
-        {
-            ret = atk_mw8266d_send_at_cmd("AT+CWMODE=2", "OK", 500);    /* AP模式 */
-            break;
-        }
-        case 3:
-        {
-            ret = atk_mw8266d_send_at_cmd("AT+CWMODE=3", "OK", 500);    /* AP+Station模式 */
-            break;
-        }
-        default:
-        {
-            return ATK_MW8266D_EINVAL;
-        }
+    case 1:
+    {
+        ret = atk_mw8266d_send_at_cmd("AT+CWMODE=1", "OK", 500); /* Station模式 */
+        break;
     }
-    
+    case 2:
+    {
+        ret = atk_mw8266d_send_at_cmd("AT+CWMODE=2", "OK", 500); /* AP模式 */
+        break;
+    }
+    case 3:
+    {
+        ret = atk_mw8266d_send_at_cmd("AT+CWMODE=3", "OK", 500); /* AP+Station模式 */
+        break;
+    }
+    default:
+    {
+        return ATK_MW8266D_EINVAL;
+    }
+    }
+
     if (ret == ATK_MW8266D_EOK)
     {
         return ATK_MW8266D_EOK;
@@ -215,7 +215,7 @@ uint8_t atk_mw8266d_set_mode(uint8_t mode)
 uint8_t atk_mw8266d_sw_reset(void)
 {
     uint8_t ret;
-    
+
     ret = atk_mw8266d_send_at_cmd("AT+RST", "OK", 500);
     if (ret == ATK_MW8266D_EOK)
     {
@@ -238,25 +238,25 @@ uint8_t atk_mw8266d_sw_reset(void)
 uint8_t atk_mw8266d_ate_config(uint8_t cfg)
 {
     uint8_t ret;
-    
+
     switch (cfg)
     {
-        case 0:
-        {
-            ret = atk_mw8266d_send_at_cmd("ATE0", "OK", 500);   /* 关闭回显 */
-            break;
-        }
-        case 1:
-        {
-            ret = atk_mw8266d_send_at_cmd("ATE1", "OK", 500);   /* 打开回显 */
-            break;
-        }
-        default:
-        {
-            return ATK_MW8266D_EINVAL;
-        }
+    case 0:
+    {
+        ret = atk_mw8266d_send_at_cmd("ATE0", "OK", 500); /* 关闭回显 */
+        break;
     }
-    
+    case 1:
+    {
+        ret = atk_mw8266d_send_at_cmd("ATE1", "OK", 500); /* 打开回显 */
+        break;
+    }
+    default:
+    {
+        return ATK_MW8266D_EINVAL;
+    }
+    }
+
     if (ret == ATK_MW8266D_EOK)
     {
         return ATK_MW8266D_EOK;
@@ -278,7 +278,7 @@ uint8_t atk_mw8266d_join_ap(char *ssid, char *pwd)
 {
     uint8_t ret;
     char cmd[64];
-    
+
     sprintf(cmd, "AT+CWJAP=\"%s\",\"%s\"", ssid, pwd);
     ret = atk_mw8266d_send_at_cmd(cmd, "WIFI GOT IP", 10000);
     if (ret == ATK_MW8266D_EOK)
@@ -302,18 +302,18 @@ uint8_t atk_mw8266d_get_ip(char *buf)
     uint8_t ret;
     char *p_start;
     char *p_end;
-    
+
     ret = atk_mw8266d_send_at_cmd("AT+CIFSR", "OK", 500);
     if (ret != ATK_MW8266D_EOK)
     {
         return ATK_MW8266D_ERROR;
     }
-    
+
     p_start = strstr((const char *)atk_mw8266d_uart_rx_get_frame(), "\"");
     p_end = strstr(p_start + 1, "\"");
     *p_end = '\0';
     sprintf(buf, "%s", p_start + 1);
-    
+
     return ATK_MW8266D_EOK;
 }
 
@@ -328,7 +328,7 @@ uint8_t atk_mw8266d_connect_tcp_server(char *server_ip, char *server_port)
 {
     uint8_t ret;
     char cmd[64];
-    
+
     sprintf(cmd, "AT+CIPSTART=\"TCP\",\"%s\",%s", server_ip, server_port);
     ret = atk_mw8266d_send_at_cmd(cmd, "CONNECT", 5000);
     if (ret == ATK_MW8266D_EOK)
@@ -350,8 +350,8 @@ uint8_t atk_mw8266d_connect_tcp_server(char *server_ip, char *server_port)
 uint8_t atk_mw8266d_enter_unvarnished(void)
 {
     uint8_t ret;
-    
-    ret  = atk_mw8266d_send_at_cmd("AT+CIPMODE=1", "OK", 500);
+
+    ret = atk_mw8266d_send_at_cmd("AT+CIPMODE=1", "OK", 500);
     ret += atk_mw8266d_send_at_cmd("AT+CIPSEND", ">", 500);
     if (ret == ATK_MW8266D_EOK)
     {
@@ -384,7 +384,7 @@ uint8_t atk_mw8266d_connect_atkcld(char *id, char *pwd)
 {
     uint8_t ret;
     char cmd[64];
-    
+
     sprintf(cmd, "AT+ATKCLDSTA=\"%s\",\"%s\"", id, pwd);
     ret = atk_mw8266d_send_at_cmd(cmd, "CLOUD CONNECTED", 10000);
     if (ret == ATK_MW8266D_EOK)
@@ -406,7 +406,7 @@ uint8_t atk_mw8266d_connect_atkcld(char *id, char *pwd)
 uint8_t atk_mw8266d_disconnect_atkcld(void)
 {
     uint8_t ret;
-    
+
     ret = atk_mw8266d_send_at_cmd("AT+ATKCLDCLS", "CLOUD DISCONNECT", 500);
     if (ret == ATK_MW8266D_EOK)
     {

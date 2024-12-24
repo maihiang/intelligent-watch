@@ -28,7 +28,7 @@
 
 extern uint16_t year, month, day, hour, minute, second, solar_term;
 
-TIM_HandleTypeDef g_timx_handle;  /* 定时器句柄 */
+TIM_HandleTypeDef g_timx_handle; /* 定时器句柄 */
 
 /**
  * @brief       基本定时器TIMX定时中断初始化函数
@@ -44,13 +44,13 @@ TIM_HandleTypeDef g_timx_handle;  /* 定时器句柄 */
  */
 void btim_timx_int_init(uint16_t arr, uint16_t psc)
 {
-    g_timx_handle.Instance = BTIM_TIMX_INT;                      /* 通用定时器X */
-    g_timx_handle.Init.Prescaler = psc;                          /* 设置预分频系数 */
-    g_timx_handle.Init.CounterMode = TIM_COUNTERMODE_UP;         /* 递增计数模式 */
-    g_timx_handle.Init.Period = arr;                             /* 自动装载值 */
+    g_timx_handle.Instance = BTIM_TIMX_INT;              /* 通用定时器X */
+    g_timx_handle.Init.Prescaler = psc;                  /* 设置预分频系数 */
+    g_timx_handle.Init.CounterMode = TIM_COUNTERMODE_UP; /* 递增计数模式 */
+    g_timx_handle.Init.Period = arr;                     /* 自动装载值 */
     HAL_TIM_Base_Init(&g_timx_handle);
 
-    HAL_TIM_Base_Start_IT(&g_timx_handle);    /* 使能定时器x及其更新中断 */
+    HAL_TIM_Base_Start_IT(&g_timx_handle); /* 使能定时器x及其更新中断 */
 }
 
 /**
@@ -91,4 +91,3 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         updateTime(&year, &month, &day, &hour, &minute, &second, &solar_term);
     }
 }
-

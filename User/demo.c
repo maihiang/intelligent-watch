@@ -13,7 +13,7 @@
 #include "math.h"
 #include "arm_math.h"
 
-//#define PI (float)(3.1415926)
+// #define PI (float)(3.1415926)
 
 /*
 模式相关全局变量
@@ -22,9 +22,9 @@ mode可取0-5
 */
 int mode = 0;
 int next_mode = 0;
-//定义全局变量，表示日期时间
+// 定义全局变量，表示日期时间
 uint16_t year = 2024, month = 12, day = 25, hour = 23, minute = 59, second = 50, solar_term = 0;
-//定义全局变量，表示设置界面中的日期和时间
+// 定义全局变量，表示设置界面中的日期和时间
 uint16_t year_set, month_set, day_set, hour_set, minute_set, second_set;
 
 /**
@@ -37,12 +37,12 @@ static void demo_show_ui(void)
     uint16_t x_scan;
     uint16_t y_scan;
 
-    //以下进行扫描，并在合适的时候进行模式切换
-    //在该周期内，触摸屏有触摸，进行相应操作，否则mode不变；同时在切换mode时清屏
+    // 以下进行扫描，并在合适的时候进行模式切换
+    // 在该周期内，触摸屏有触摸，进行相应操作，否则mode不变；同时在切换mode时清屏
     if (atk_md0280_touch_scan(&x_scan, &y_scan) == 0)
     {
-        //主界面的操作
-        if(mode == 0)
+        // 主界面的操作
+        if (mode == 0)
         {
             /*左下角的按钮，按下去后进入选择各个功能的界面*/
             if ((x_scan <= 50) && (y_scan >= 269) && (y_scan <= 319))
@@ -59,79 +59,79 @@ static void demo_show_ui(void)
             }
         }
 
-        //应用菜单的操作
-        if(mode == 1)
+        // 应用菜单的操作
+        if (mode == 1)
         {
-            //返回按钮相应
-            if ((x_scan <= 60)&&(y_scan <= 50))
+            // 返回按钮相应
+            if ((x_scan <= 60) && (y_scan <= 50))
             {
                 next_mode = 0;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
-            //DHT11按钮相应
-            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 130)&&(y_scan <= 170))
+            // DHT11按钮相应
+            if ((x_scan >= 20) && (x_scan <= 110) && (y_scan >= 130) && (y_scan <= 170))
             {
                 next_mode = 11;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
-            //WIFI按钮相应
-            if ((x_scan >= 129)&&(x_scan <= 219)&&(y_scan >= 130)&&(y_scan <= 170))
+            // WIFI按钮相应
+            if ((x_scan >= 129) && (x_scan <= 219) && (y_scan >= 130) && (y_scan <= 170))
             {
                 next_mode = 12;
                 atk_md0280_clear(ATK_MD0280_WHITE);
             }
-            //核心算法按钮响应
-            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 180)&&(y_scan <= 220))
+            // 核心算法按钮响应
+            if ((x_scan >= 20) && (x_scan <= 110) && (y_scan >= 180) && (y_scan <= 220))
             {
                 next_mode = 13;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
         }
-        
-        //应用1：DHT11温湿度传感器
-        if(mode == 11)
+
+        // 应用1：DHT11温湿度传感器
+        if (mode == 11)
         {
-            //返回按钮相应
-            if ((x_scan <= 60)&&(y_scan <= 50))
+            // 返回按钮相应
+            if ((x_scan <= 60) && (y_scan <= 50))
             {
                 next_mode = 1;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
         }
 
-        //应用2：WIFI模块
-        if(mode == 12)
+        // 应用2：WIFI模块
+        if (mode == 12)
         {
-            //返回按钮相应
-            if ((x_scan <= 60)&&(y_scan <= 50))
+            // 返回按钮相应
+            if ((x_scan <= 60) && (y_scan <= 50))
             {
                 next_mode = 1;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
         }
 
-        //应用3：核心算法的画图
-        if(mode == 13)
+        // 应用3：核心算法的画图
+        if (mode == 13)
         {
-            //返回按钮相应
-            if ((x_scan <= 60)&&(y_scan <= 50))
+            // 返回按钮相应
+            if ((x_scan <= 60) && (y_scan <= 50))
             {
                 next_mode = 1;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
         }
 
-        //设置界面的操作
-        if(mode == 2)
+        // 设置界面的操作
+        if (mode == 2)
         {
-            //返回按钮相应
-            if ((x_scan <= 60)&&(y_scan <= 50))
+            // 返回按钮相应
+            if ((x_scan <= 60) && (y_scan <= 50))
             {
                 next_mode = 0;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
-            //日期设置按钮相应
-            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 130)&&(y_scan <= 270))
+            // 日期设置按钮相应
+            if ((x_scan >= 20) && (x_scan <= 110) && (y_scan >= 130) && (y_scan <= 270))
             {
                 next_mode = 21;
                 year_set = year;
@@ -139,8 +139,8 @@ static void demo_show_ui(void)
                 day_set = day;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
-            //时间设置按钮相应
-            if ((x_scan >= 129)&&(x_scan <= 219)&&(y_scan >= 130)&&(y_scan <= 270))
+            // 时间设置按钮相应
+            if ((x_scan >= 129) && (x_scan <= 219) && (y_scan >= 130) && (y_scan <= 270))
             {
                 next_mode = 24;
                 hour_set = hour;
@@ -150,44 +150,44 @@ static void demo_show_ui(void)
             }
         }
 
-        //设置年份界面的操作
-        if(mode == 21)
+        // 设置年份界面的操作
+        if (mode == 21)
         {
-            //返回按钮相应
-            if ((x_scan <= 60)&&(y_scan <= 50))
+            // 返回按钮相应
+            if ((x_scan <= 60) && (y_scan <= 50))
             {
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
-            //年份确认
-            if ((x_scan >= 20)&&(x_scan <= 220)&&(y_scan >= 270)&&(y_scan <= 310))
+            // 年份确认
+            if ((x_scan >= 20) && (x_scan <= 220) && (y_scan >= 270) && (y_scan <= 310))
             {
                 year = year_set;
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
-            //年份-1
-            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 200)&&(y_scan <= 270))
+            // 年份-1
+            if ((x_scan >= 20) && (x_scan <= 110) && (y_scan >= 200) && (y_scan <= 270))
             {
-                if(year_set > 1980)
+                if (year_set > 1980)
                 {
                     year_set -= 1;
                 }
             }
 
-            //年份+1
-            if ((x_scan >= 130)&&(x_scan <= 220)&&(y_scan >= 200)&&(y_scan <= 270))
+            // 年份+1
+            if ((x_scan >= 130) && (x_scan <= 220) && (y_scan >= 200) && (y_scan <= 270))
             {
-                if(year_set < 9999)
+                if (year_set < 9999)
                 {
                     year_set += 1;
                 }
             }
 
-            //切换成月份设置界面
-            if ((x_scan >= 179)&&(x_scan <= 239)&&(y_scan >= 80)&&(y_scan <= 180))
+            // 切换成月份设置界面
+            if ((x_scan >= 179) && (x_scan <= 239) && (y_scan >= 80) && (y_scan <= 180))
             {
                 next_mode = 22;
                 month_set = month;
@@ -195,54 +195,54 @@ static void demo_show_ui(void)
             }
         }
 
-        //设置月份界面的操作
-        if(mode == 22)
+        // 设置月份界面的操作
+        if (mode == 22)
         {
-            //返回按钮相应
-            if ((x_scan <= 60)&&(y_scan <= 50))
+            // 返回按钮相应
+            if ((x_scan <= 60) && (y_scan <= 50))
             {
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
-            //月份确认
-            if ((x_scan >= 20)&&(x_scan <= 220)&&(y_scan >= 270)&&(y_scan <= 310))
+            // 月份确认
+            if ((x_scan >= 20) && (x_scan <= 220) && (y_scan >= 270) && (y_scan <= 310))
             {
                 month = month_set;
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
-            //月份-1
-            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 200)&&(y_scan <= 270))
+            // 月份-1
+            if ((x_scan >= 20) && (x_scan <= 110) && (y_scan >= 200) && (y_scan <= 270))
             {
                 month_set -= 1;
-                if(month_set <= 0)
+                if (month_set <= 0)
                 {
                     month_set = 12;
                 }
             }
 
-            //月份+1
-            if ((x_scan >= 130)&&(x_scan <= 220)&&(y_scan >= 200)&&(y_scan <= 270))
+            // 月份+1
+            if ((x_scan >= 130) && (x_scan <= 220) && (y_scan >= 200) && (y_scan <= 270))
             {
                 month_set += 1;
-                if(month_set >= 13)
+                if (month_set >= 13)
                 {
                     month_set = 1;
                 }
             }
 
-            //切换成日期设置界面
-            if ((x_scan >= 179)&&(x_scan <= 239)&&(y_scan >= 80)&&(y_scan <= 180))
+            // 切换成日期设置界面
+            if ((x_scan >= 179) && (x_scan <= 239) && (y_scan >= 80) && (y_scan <= 180))
             {
                 next_mode = 23;
                 day_set = day;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
-            //切换成年份设置界面
-            if ((x_scan <= 60)&&(y_scan >= 80)&&(y_scan <= 180))
+            // 切换成年份设置界面
+            if ((x_scan <= 60) && (y_scan >= 80) && (y_scan <= 180))
             {
                 next_mode = 21;
                 year_set = year;
@@ -250,26 +250,26 @@ static void demo_show_ui(void)
             }
         }
 
-        //设置日期界面的操作
-        if(mode == 23)
+        // 设置日期界面的操作
+        if (mode == 23)
         {
-            //返回按钮相应
-            if ((x_scan <= 60)&&(y_scan <= 50))
+            // 返回按钮相应
+            if ((x_scan <= 60) && (y_scan <= 50))
             {
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
-            //日期确认
-            if ((x_scan >= 20)&&(x_scan <= 220)&&(y_scan >= 270)&&(y_scan <= 310))
+            // 日期确认
+            if ((x_scan >= 20) && (x_scan <= 220) && (y_scan >= 270) && (y_scan <= 310))
             {
                 day = day_set;
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
-            //日期-1
-            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 200)&&(y_scan <= 270))
+            // 日期-1
+            if ((x_scan >= 20) && (x_scan <= 110) && (y_scan >= 200) && (y_scan <= 270))
             {
                 day_set -= 1;
                 if (day_set <= 0)
@@ -278,8 +278,8 @@ static void demo_show_ui(void)
                 }
             }
 
-            //日期+1
-            if ((x_scan >= 130)&&(x_scan <= 220)&&(y_scan >= 200)&&(y_scan <= 270))
+            // 日期+1
+            if ((x_scan >= 130) && (x_scan <= 220) && (y_scan >= 200) && (y_scan <= 270))
             {
                 day_set += 1;
                 if (day_set > daysInMonth(year, month))
@@ -288,37 +288,37 @@ static void demo_show_ui(void)
                 }
             }
 
-            //切换成月份设置界面
-            if ((x_scan <= 60)&&(y_scan >= 80)&&(y_scan <= 180))
+            // 切换成月份设置界面
+            if ((x_scan <= 60) && (y_scan >= 80) && (y_scan <= 180))
             {
                 next_mode = 22;
                 month_set = month;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
         }
-    
-        //设置小时界面的操作
-        if(mode == 24)
+
+        // 设置小时界面的操作
+        if (mode == 24)
         {
-            //返回按钮相应
-            if ((x_scan <= 50)&&(y_scan <= 50))
+            // 返回按钮相应
+            if ((x_scan <= 50) && (y_scan <= 50))
             {
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
-            //时间确认
-            if ((x_scan >= 20)&&(x_scan <= 220)&&(y_scan >= 270)&&(y_scan <= 310))
+            // 时间确认
+            if ((x_scan >= 20) && (x_scan <= 220) && (y_scan >= 270) && (y_scan <= 310))
             {
                 hour = hour_set;
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
-            //小时-1
-            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 200)&&(y_scan <= 270))
+            // 小时-1
+            if ((x_scan >= 20) && (x_scan <= 110) && (y_scan >= 200) && (y_scan <= 270))
             {
-                if(hour_set <= 0 || hour_set > 23)
+                if (hour_set <= 0 || hour_set > 23)
                 {
                     hour_set = 23;
                 }
@@ -328,8 +328,8 @@ static void demo_show_ui(void)
                 }
             }
 
-            //小时+1
-            if ((x_scan >= 130)&&(x_scan <= 220)&&(y_scan >= 200)&&(y_scan <= 270))
+            // 小时+1
+            if ((x_scan >= 130) && (x_scan <= 220) && (y_scan >= 200) && (y_scan <= 270))
             {
                 hour_set += 1;
                 if (hour_set > 23)
@@ -338,8 +338,8 @@ static void demo_show_ui(void)
                 }
             }
 
-            //切换成分钟设置界面
-            if ((x_scan >= 179)&&(x_scan <= 239)&&(y_scan >= 80)&&(y_scan <= 180))
+            // 切换成分钟设置界面
+            if ((x_scan >= 179) && (x_scan <= 239) && (y_scan >= 80) && (y_scan <= 180))
             {
                 next_mode = 25;
                 minute_set = minute;
@@ -347,26 +347,26 @@ static void demo_show_ui(void)
             }
         }
 
-        //设置分钟界面的操作
-        if(mode == 25)
+        // 设置分钟界面的操作
+        if (mode == 25)
         {
-            //返回按钮相应
-            if ((x_scan <= 60)&&(y_scan <= 50))
+            // 返回按钮相应
+            if ((x_scan <= 60) && (y_scan <= 50))
             {
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
-            //分钟确认
-            if ((x_scan >= 20)&&(x_scan <= 220)&&(y_scan >= 270)&&(y_scan <= 310))
+            // 分钟确认
+            if ((x_scan >= 20) && (x_scan <= 220) && (y_scan >= 270) && (y_scan <= 310))
             {
                 minute = minute_set;
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
-            //分钟-1
-            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 200)&&(y_scan <= 270))
+            // 分钟-1
+            if ((x_scan >= 20) && (x_scan <= 110) && (y_scan >= 200) && (y_scan <= 270))
             {
                 if (minute_set <= 0 || minute_set > 59)
                 {
@@ -378,8 +378,8 @@ static void demo_show_ui(void)
                 }
             }
 
-            //分钟+1
-            if ((x_scan >= 130)&&(x_scan <= 220)&&(y_scan >= 200)&&(y_scan <= 270))
+            // 分钟+1
+            if ((x_scan >= 130) && (x_scan <= 220) && (y_scan >= 200) && (y_scan <= 270))
             {
                 minute_set += 1;
                 if (minute_set > 59)
@@ -388,16 +388,16 @@ static void demo_show_ui(void)
                 }
             }
 
-            //切换成小时设置界面
-            if ((x_scan <= 50)&&(y_scan >= 80)&&(y_scan <= 180))
+            // 切换成小时设置界面
+            if ((x_scan <= 50) && (y_scan >= 80) && (y_scan <= 180))
             {
                 next_mode = 24;
                 hour_set = hour;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
-            //切换成秒设置界面
-            if ((x_scan >= 189)&&(x_scan <= 239)&&(y_scan >= 80)&&(y_scan <= 180))
+            // 切换成秒设置界面
+            if ((x_scan >= 189) && (x_scan <= 239) && (y_scan >= 80) && (y_scan <= 180))
             {
                 next_mode = 26;
                 second_set = second;
@@ -405,26 +405,26 @@ static void demo_show_ui(void)
             }
         }
 
-        //设置秒界面的操作
-        if(mode == 26)
+        // 设置秒界面的操作
+        if (mode == 26)
         {
-            //返回按钮相应
-            if ((x_scan <= 60)&&(y_scan <= 50))
+            // 返回按钮相应
+            if ((x_scan <= 60) && (y_scan <= 50))
             {
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
-            //秒确认
-            if ((x_scan >= 20)&&(x_scan <= 220)&&(y_scan >= 270)&&(y_scan <= 310))
+            // 秒确认
+            if ((x_scan >= 20) && (x_scan <= 220) && (y_scan >= 270) && (y_scan <= 310))
             {
                 second = second_set;
                 next_mode = 2;
                 atk_md0280_clear(ATK_MD0280_BLACK);
             }
 
-            //秒-1
-            if ((x_scan >= 20)&&(x_scan <= 110)&&(y_scan >= 200)&&(y_scan <= 270))
+            // 秒-1
+            if ((x_scan >= 20) && (x_scan <= 110) && (y_scan >= 200) && (y_scan <= 270))
             {
                 if (second_set <= 0 || second_set > 59)
                 {
@@ -436,8 +436,8 @@ static void demo_show_ui(void)
                 }
             }
 
-            //秒+1
-            if ((x_scan >= 130)&&(x_scan <= 220)&&(y_scan >= 200)&&(y_scan <= 270))
+            // 秒+1
+            if ((x_scan >= 130) && (x_scan <= 220) && (y_scan >= 200) && (y_scan <= 270))
             {
                 second_set += 1;
                 if (second_set > 59)
@@ -446,8 +446,8 @@ static void demo_show_ui(void)
                 }
             }
 
-            //切换成分钟设置界面
-            if ((x_scan <= 50)&&(y_scan >= 80)&&(y_scan <= 180))
+            // 切换成分钟设置界面
+            if ((x_scan <= 50) && (y_scan >= 80) && (y_scan <= 180))
             {
                 next_mode = 25;
                 minute_set = minute;
@@ -458,79 +458,79 @@ static void demo_show_ui(void)
 
     mode = next_mode;
 
-    //以下根据mode的值进行显示，每100ms刷新一次，显示的函数写在了displaymode.c中
-    switch(mode)
+    // 以下根据mode的值进行显示，每100ms刷新一次，显示的函数写在了displaymode.c中
+    switch (mode)
     {
-        //显示主界面
-        case 0:
-            display_main();
-            break;
-        
-        //显示应用菜单
-        case 1:
-            display_menu(); 
-            break;
+    // 显示主界面
+    case 0:
+        display_main();
+        break;
 
-        //显示DHT11界面
-        case 11:
-            DHT11_Init();	//DHT11初始化
+    // 显示应用菜单
+    case 1:
+        display_menu();
+        break;
 
-            delay_ms(200);
-						delay_ms(200);
+    // 显示DHT11界面
+    case 11:
+        DHT11_Init(); // DHT11初始化
 
-            display_DHT11();
-            break;
-        
-        //显示WIFI界面
-        case 12:
-            display_WIFI();
-            break;
-        
-        //显示核心算法界面
-        case 13:
-            display_CORE();
-            break;
+        delay_ms(200);
+        delay_ms(200);
 
-        //显示设置界面
-        case 2:
-            display_setting();
-            break;
-        
-        //显示设置年份界面
-        case 21:
-            display_setting_year();
-            break;
-        
-        //显示设置月份界面
-        case 22:
-            display_setting_month();
-            break;
-        
-        //显示设置日期界面
-        case 23:
-            display_setting_day();
-            break;
-        
-        //显示设置小时界面
-        case 24:
-            display_setting_hour();
-            break;
-        
-        //显示设置分钟界面
-        case 25:
-            display_setting_minute();
-            break;
-        
-        //显示设置秒界面
-        case 26:
-            display_setting_second();
-            break;
-            
-        case 3:
-            break;
+        display_DHT11();
+        break;
 
-        case 4:
-            break;
+    // 显示WIFI界面
+    case 12:
+        display_WIFI();
+        break;
+
+    // 显示核心算法界面
+    case 13:
+        display_CORE();
+        break;
+
+    // 显示设置界面
+    case 2:
+        display_setting();
+        break;
+
+    // 显示设置年份界面
+    case 21:
+        display_setting_year();
+        break;
+
+    // 显示设置月份界面
+    case 22:
+        display_setting_month();
+        break;
+
+    // 显示设置日期界面
+    case 23:
+        display_setting_day();
+        break;
+
+    // 显示设置小时界面
+    case 24:
+        display_setting_hour();
+        break;
+
+    // 显示设置分钟界面
+    case 25:
+        display_setting_minute();
+        break;
+
+    // 显示设置秒界面
+    case 26:
+        display_setting_second();
+        break;
+
+    case 3:
+        break;
+
+    case 4:
+        break;
     }
 }
 
@@ -553,13 +553,12 @@ void demo_run(void)
             delay_ms(200);
         }
     }
-    
+
     /* ATK-MD0280模块LCD清屏 */
     atk_md0280_clear(ATK_MD0280_BLACK);
 
     /* 初始化日期 */
     year = 2024, month = 12, day = 31, hour = 23, minute = 59, second = 40, solar_term = 0;
-
 
     while (1)
     {

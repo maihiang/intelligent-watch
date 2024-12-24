@@ -26,8 +26,8 @@
 #include <math.h>
 
 /* ATK-MD0280模块LCD驱动器ID */
-#define ATK_MD0280_CHIP_ID1         0x9341
-#define ATK_MD0280_CHIP_ID2         0x8552
+#define ATK_MD0280_CHIP_ID1 0x9341
+#define ATK_MD0280_CHIP_ID2 0x8552
 
 /* ATK-MD0280模块LCD扫描方向 */
 #define ATK_MD0280_SCAN_DIR_L2R_U2D (0x0000)
@@ -57,17 +57,17 @@ static struct
 static void atk_md0280_hw_init(void)
 {
     GPIO_InitTypeDef gpio_init_struct = {0};
-    
+
     /* 使能时钟 */
     ATK_MD0280_BL_GPIO_CLK_ENABLE();
-    
+
     /* 初始化BL引脚 */
-    gpio_init_struct.Pin    = ATK_MD0280_BL_GPIO_PIN;
-    gpio_init_struct.Mode   = GPIO_MODE_OUTPUT_PP;
-    gpio_init_struct.Pull   = GPIO_PULLUP;
-    gpio_init_struct.Speed  = GPIO_SPEED_FREQ_HIGH;
+    gpio_init_struct.Pin = ATK_MD0280_BL_GPIO_PIN;
+    gpio_init_struct.Mode = GPIO_MODE_OUTPUT_PP;
+    gpio_init_struct.Pull = GPIO_PULLUP;
+    gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(ATK_MD0280_BL_GPIO_PORT, &gpio_init_struct);
-    
+
     ATK_MD0280_BL(0);
 }
 
@@ -79,14 +79,14 @@ static void atk_md0280_hw_init(void)
 static inline uint16_t atk_md0280_get_chip_id(void)
 {
     uint16_t chip_id;
-    
+
     /* 尝试获取ID1 */
     atk_md0280_fsmc_write_cmd(0xD3);
     chip_id = atk_md0280_fsmc_read_dat();
     chip_id = atk_md0280_fsmc_read_dat();
     chip_id = atk_md0280_fsmc_read_dat() << 8;
     chip_id |= (atk_md0280_fsmc_read_dat()) & 0x00FF;
-    
+
     if (chip_id != ATK_MD0280_CHIP_ID1)
     {
         /* 尝试获取ID2 */
@@ -96,7 +96,7 @@ static inline uint16_t atk_md0280_get_chip_id(void)
         chip_id = atk_md0280_fsmc_read_dat() << 8;
         chip_id |= (atk_md0280_fsmc_read_dat()) & 0x00FF;
     }
-    
+
     return chip_id;
 }
 
@@ -335,12 +335,12 @@ static uint32_t atk_md0280_pow(uint8_t x, uint8_t y)
 {
     uint8_t loop;
     uint32_t res = 1;
-    
-    for (loop=0; loop<y; loop++)
+
+    for (loop = 0; loop < y; loop++)
     {
         res *= x;
     }
-    
+
     return res;
 }
 
@@ -353,7 +353,7 @@ static uint32_t atk_md0280_pow(uint8_t x, uint8_t y)
 uint8_t atk_md0280_init(void)
 {
     uint16_t chip_id;
-    
+
     atk_md0280_hw_init();               /* ATK-MD0280模块硬件初始化 */
     atk_md0280_fsmc_init();             /* ATK-MD0280模块FSMC接口初始化 */
     chip_id = atk_md0280_get_chip_id(); /* 获取ATK-MD0280模块驱动器ID */
@@ -375,7 +375,7 @@ uint8_t atk_md0280_init(void)
 #if (ATK_MD0280_USING_TOUCH != 0)
     atk_md0280_touch_init();
 #endif
-    
+
     return ATK_MD0280_EOK;
 }
 
@@ -451,183 +451,183 @@ void atk_md0280_display_off(void)
  *                        ATK_MD0280_LCD_SCAN_DIR_D2U_R2L: 从下到上，从右到左
  * @retval      ATK_MD0280_EOK   : 设置ATK-MD0280模块LCD扫描方向成功
  *              ATK_MD0280_ERROR : 设置ATK-MD0280模块LCD扫描方向失败
-*               ATK_MD0280_EINVAL: 传入参数错误
+ *               ATK_MD0280_EINVAL: 传入参数错误
  */
 uint8_t atk_md0280_set_scan_dir(atk_md0280_lcd_scan_dir_t scan_dir)
 {
     uint16_t reg36;
-    
+
     switch (g_atk_md0280_sta.disp_dir)
     {
-        case ATK_MD0280_LCD_DISP_DIR_0:
+    case ATK_MD0280_LCD_DISP_DIR_0:
+    {
+        reg36 = (uint16_t)scan_dir;
+        break;
+    }
+    case ATK_MD0280_LCD_DISP_DIR_90:
+    {
+        switch (scan_dir)
         {
-            reg36 = (uint16_t)scan_dir;
+        case ATK_MD0280_LCD_SCAN_DIR_L2R_U2D:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_U2D_R2L;
             break;
         }
-        case ATK_MD0280_LCD_DISP_DIR_90:
+        case ATK_MD0280_LCD_SCAN_DIR_L2R_D2U:
         {
-            switch (scan_dir)
-            {
-                case ATK_MD0280_LCD_SCAN_DIR_L2R_U2D:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_U2D_R2L;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_L2R_D2U:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_U2D_L2R;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_R2L_U2D:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_D2U_R2L;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_R2L_D2U:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_D2U_L2R;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_U2D_L2R:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_R2L_U2D;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_U2D_R2L:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_R2L_D2U;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_D2U_L2R:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_L2R_U2D;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_D2U_R2L:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_L2R_D2U;
-                    break;
-                }
-                default:
-                {
-                    return ATK_MD0280_EINVAL;
-                }
-            }
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_U2D_L2R;
             break;
         }
-        case ATK_MD0280_LCD_DISP_DIR_180:
+        case ATK_MD0280_LCD_SCAN_DIR_R2L_U2D:
         {
-            switch (scan_dir)
-            {
-                case ATK_MD0280_LCD_SCAN_DIR_L2R_U2D:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_R2L_D2U;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_L2R_D2U:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_R2L_U2D;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_R2L_U2D:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_L2R_D2U;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_R2L_D2U:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_L2R_U2D;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_U2D_L2R:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_D2U_R2L;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_U2D_R2L:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_D2U_L2R;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_D2U_L2R:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_U2D_R2L;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_D2U_R2L:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_U2D_L2R;
-                    break;
-                }
-                default:
-                {
-                    return ATK_MD0280_EINVAL;
-                }
-            }
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_D2U_R2L;
             break;
         }
-        case ATK_MD0280_LCD_DISP_DIR_270:
+        case ATK_MD0280_LCD_SCAN_DIR_R2L_D2U:
         {
-            switch (scan_dir)
-            {
-                case ATK_MD0280_LCD_SCAN_DIR_L2R_U2D:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_D2U_L2R;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_L2R_D2U:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_D2U_R2L;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_R2L_U2D:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_U2D_L2R;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_R2L_D2U:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_U2D_R2L;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_U2D_L2R:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_L2R_D2U;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_U2D_R2L:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_L2R_U2D;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_D2U_L2R:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_R2L_D2U;
-                    break;
-                }
-                case ATK_MD0280_LCD_SCAN_DIR_D2U_R2L:
-                {
-                    reg36 = ATK_MD0280_LCD_SCAN_DIR_R2L_U2D;
-                    break;
-                }
-                default:
-                {
-                    return ATK_MD0280_EINVAL;
-                }
-            }
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_D2U_L2R;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_U2D_L2R:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_R2L_U2D;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_U2D_R2L:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_R2L_D2U;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_D2U_L2R:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_L2R_U2D;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_D2U_R2L:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_L2R_D2U;
             break;
         }
         default:
         {
-            return ATK_MD0280_ERROR;
+            return ATK_MD0280_EINVAL;
         }
+        }
+        break;
     }
-    
+    case ATK_MD0280_LCD_DISP_DIR_180:
+    {
+        switch (scan_dir)
+        {
+        case ATK_MD0280_LCD_SCAN_DIR_L2R_U2D:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_R2L_D2U;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_L2R_D2U:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_R2L_U2D;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_R2L_U2D:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_L2R_D2U;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_R2L_D2U:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_L2R_U2D;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_U2D_L2R:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_D2U_R2L;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_U2D_R2L:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_D2U_L2R;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_D2U_L2R:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_U2D_R2L;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_D2U_R2L:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_U2D_L2R;
+            break;
+        }
+        default:
+        {
+            return ATK_MD0280_EINVAL;
+        }
+        }
+        break;
+    }
+    case ATK_MD0280_LCD_DISP_DIR_270:
+    {
+        switch (scan_dir)
+        {
+        case ATK_MD0280_LCD_SCAN_DIR_L2R_U2D:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_D2U_L2R;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_L2R_D2U:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_D2U_R2L;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_R2L_U2D:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_U2D_L2R;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_R2L_D2U:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_U2D_R2L;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_U2D_L2R:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_L2R_D2U;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_U2D_R2L:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_L2R_U2D;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_D2U_L2R:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_R2L_D2U;
+            break;
+        }
+        case ATK_MD0280_LCD_SCAN_DIR_D2U_R2L:
+        {
+            reg36 = ATK_MD0280_LCD_SCAN_DIR_R2L_U2D;
+            break;
+        }
+        default:
+        {
+            return ATK_MD0280_EINVAL;
+        }
+        }
+        break;
+    }
+    default:
+    {
+        return ATK_MD0280_ERROR;
+    }
+    }
+
     g_atk_md0280_sta.scan_dir = (atk_md0280_lcd_scan_dir_t)reg36;
     atk_md0280_fsmc_write_reg(0x36, reg36);
     atk_md0280_set_column_address(0, g_atk_md0280_sta.width - 1);
     atk_md0280_set_page_address(0, g_atk_md0280_sta.height - 1);
-    
+
     return ATK_MD0280_EOK;
 }
 
@@ -644,39 +644,39 @@ uint8_t atk_md0280_set_disp_dir(atk_md0280_lcd_disp_dir_t disp_dir)
 {
     switch (disp_dir)
     {
-        case ATK_MD0280_LCD_DISP_DIR_0:
-        {
-            g_atk_md0280_sta.width = ATK_MD0280_LCD_WIDTH;
-            g_atk_md0280_sta.height = ATK_MD0280_LCD_HEIGHT;
-            break;
-        }
-        case ATK_MD0280_LCD_DISP_DIR_90:
-        {
-            g_atk_md0280_sta.width = ATK_MD0280_LCD_HEIGHT;
-            g_atk_md0280_sta.height = ATK_MD0280_LCD_WIDTH;
-            break;
-        }
-        case ATK_MD0280_LCD_DISP_DIR_180:
-        {
-            g_atk_md0280_sta.width = ATK_MD0280_LCD_WIDTH;
-            g_atk_md0280_sta.height = ATK_MD0280_LCD_HEIGHT;
-            break;
-        }
-        case ATK_MD0280_LCD_DISP_DIR_270:
-        {
-            g_atk_md0280_sta.width = ATK_MD0280_LCD_HEIGHT;
-            g_atk_md0280_sta.height = ATK_MD0280_LCD_WIDTH;
-            break;
-        }
-        default:
-        {
-            return ATK_MD0280_EINVAL;
-        }
+    case ATK_MD0280_LCD_DISP_DIR_0:
+    {
+        g_atk_md0280_sta.width = ATK_MD0280_LCD_WIDTH;
+        g_atk_md0280_sta.height = ATK_MD0280_LCD_HEIGHT;
+        break;
     }
-    
+    case ATK_MD0280_LCD_DISP_DIR_90:
+    {
+        g_atk_md0280_sta.width = ATK_MD0280_LCD_HEIGHT;
+        g_atk_md0280_sta.height = ATK_MD0280_LCD_WIDTH;
+        break;
+    }
+    case ATK_MD0280_LCD_DISP_DIR_180:
+    {
+        g_atk_md0280_sta.width = ATK_MD0280_LCD_WIDTH;
+        g_atk_md0280_sta.height = ATK_MD0280_LCD_HEIGHT;
+        break;
+    }
+    case ATK_MD0280_LCD_DISP_DIR_270:
+    {
+        g_atk_md0280_sta.width = ATK_MD0280_LCD_HEIGHT;
+        g_atk_md0280_sta.height = ATK_MD0280_LCD_WIDTH;
+        break;
+    }
+    default:
+    {
+        return ATK_MD0280_EINVAL;
+    }
+    }
+
     g_atk_md0280_sta.disp_dir = disp_dir;
     atk_md0280_set_scan_dir(ATK_MD0280_LCD_SCAN_DIR_L2R_U2D);
-    
+
     return ATK_MD0280_EOK;
 }
 
@@ -713,13 +713,13 @@ void atk_md0280_fill(uint16_t xs, uint16_t ys, uint16_t xe, uint16_t ye, uint16_
 {
     uint16_t x_index;
     uint16_t y_index;
-    
+
     atk_md0280_set_column_address(xs, xe);
     atk_md0280_set_page_address(ys, ye);
     atk_md0280_start_write_memory();
-    for (y_index=ys; y_index<=ye; y_index++)
+    for (y_index = ys; y_index <= ye; y_index++)
     {
-        for (x_index=xs; x_index<= xe; x_index++)
+        for (x_index = xs; x_index <= xe; x_index++)
         {
             atk_md0280_fsmc_write_dat(color);
         }
@@ -763,23 +763,23 @@ uint16_t atk_md0280_read_point(uint16_t x, uint16_t y)
     uint8_t color_r;
     uint8_t color_g;
     uint8_t color_b;
-    
+
     if ((x >= g_atk_md0280_sta.width) || (y >= g_atk_md0280_sta.height))
     {
         return ATK_MD0280_EINVAL;
     }
-    
+
     atk_md0280_set_column_address(x, x);
     atk_md0280_set_page_address(y, y);
     atk_md0280_start_read_memory();
-    
+
     color = atk_md0280_fsmc_read_dat(); /* Dummy */
     color = atk_md0280_fsmc_read_dat(); /* [15:11]: R, [7:2]:G */
     color_r = (uint8_t)(color >> 11) & 0x1F;
     color_g = (uint8_t)(color >> 2) & 0x3F;
     color = atk_md0280_fsmc_read_dat(); /* [15:11]: B */
     color_b = (uint8_t)(color >> 11) & 0x1F;
-    
+
     return (uint16_t)(color_r << 11) | (color_g << 5) | color_b;
 }
 
@@ -800,26 +800,26 @@ void atk_md0280_draw_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, ui
     int16_t y_sign;
     int16_t error;
     int16_t error2;
-    
+
     x_delta = (x1 < x2) ? (x2 - x1) : (x1 - x2);
     y_delta = (y1 < y2) ? (y2 - y1) : (y1 - y2);
     x_sign = (x1 < x2) ? 1 : -1;
     y_sign = (y1 < y2) ? 1 : -1;
     error = x_delta - y_delta;
-    
+
     atk_md0280_draw_point(x2, y2, color);
-    
+
     while ((x1 != x2) || (y1 != y2))
     {
         atk_md0280_draw_point(x1, y1, color);
-        
+
         error2 = error << 1;
         if (error2 > -y_delta)
         {
             error -= y_delta;
             x1 += x_sign;
         }
-        
+
         if (error2 < x_delta)
         {
             error += x_delta;
@@ -859,17 +859,18 @@ void atk_md0280_draw_circle(uint16_t x, uint16_t y, uint16_t r, uint16_t color)
     int32_t y_t;
     int32_t error;
     int32_t error2;
-    
+
     x_t = -r;
     y_t = 0;
     error = 2 - 2 * r;
-    
-    do {
+
+    do
+    {
         atk_md0280_draw_point(x - x_t, y + y_t, color);
         atk_md0280_draw_point(x + x_t, y + y_t, color);
         atk_md0280_draw_point(x + x_t, y - y_t, color);
         atk_md0280_draw_point(x - x_t, y - y_t, color);
-        
+
         error2 = error;
         if (error2 <= y_t)
         {
@@ -880,7 +881,7 @@ void atk_md0280_draw_circle(uint16_t x, uint16_t y, uint16_t r, uint16_t color)
                 error2 = 0;
             }
         }
-        
+
         if (error2 > x_t)
         {
             x_t++;
@@ -910,66 +911,66 @@ void atk_md0280_show_char(uint16_t x, uint16_t y, char ch, atk_md0280_lcd_font_t
     uint8_t bit_index;
     uint8_t width_index = 0;
     uint8_t height_index = 0;
-    
+
     ch_offset = ch - ' ';
-    
+
     switch (font)
     {
 #if (ATK_MD0280_FONT_12 != 0)
-        case ATK_MD0280_LCD_FONT_12:
-        {
-            ch_code = atk_md0280_font_1206[ch_offset];
-            ch_width = ATK_MD0280_FONT_12_CHAR_WIDTH;
-            ch_height = ATK_MD0280_FONT_12_CHAR_HEIGHT;
-            ch_size = ATK_MD0280_FONT_12_CHAR_SIZE;
-            break;
-        }
+    case ATK_MD0280_LCD_FONT_12:
+    {
+        ch_code = atk_md0280_font_1206[ch_offset];
+        ch_width = ATK_MD0280_FONT_12_CHAR_WIDTH;
+        ch_height = ATK_MD0280_FONT_12_CHAR_HEIGHT;
+        ch_size = ATK_MD0280_FONT_12_CHAR_SIZE;
+        break;
+    }
 #endif
 #if (ATK_MD0280_FONT_16 != 0)
-        case ATK_MD0280_LCD_FONT_16:
-        {
-            ch_code = atk_md0280_font_1608[ch_offset];
-            ch_width = ATK_MD0280_FONT_16_CHAR_WIDTH;
-            ch_height = ATK_MD0280_FONT_16_CHAR_HEIGHT;
-            ch_size = ATK_MD0280_FONT_16_CHAR_SIZE;
-            break;
-        }
+    case ATK_MD0280_LCD_FONT_16:
+    {
+        ch_code = atk_md0280_font_1608[ch_offset];
+        ch_width = ATK_MD0280_FONT_16_CHAR_WIDTH;
+        ch_height = ATK_MD0280_FONT_16_CHAR_HEIGHT;
+        ch_size = ATK_MD0280_FONT_16_CHAR_SIZE;
+        break;
+    }
 #endif
 #if (ATK_MD0280_FONT_24 != 0)
-        case ATK_MD0280_LCD_FONT_24:
-        {
-            ch_code = atk_md0280_font_2412[ch_offset];
-            ch_width = ATK_MD0280_FONT_24_CHAR_WIDTH;
-            ch_height = ATK_MD0280_FONT_24_CHAR_HEIGHT;
-            ch_size = ATK_MD0280_FONT_24_CHAR_SIZE;
-            break;
-        }
+    case ATK_MD0280_LCD_FONT_24:
+    {
+        ch_code = atk_md0280_font_2412[ch_offset];
+        ch_width = ATK_MD0280_FONT_24_CHAR_WIDTH;
+        ch_height = ATK_MD0280_FONT_24_CHAR_HEIGHT;
+        ch_size = ATK_MD0280_FONT_24_CHAR_SIZE;
+        break;
+    }
 #endif
 #if (ATK_MD0280_FONT_32 != 0)
-        case ATK_MD0280_LCD_FONT_32:
-        {
-            ch_code = atk_md0280_font_3216[ch_offset];
-            ch_width = ATK_MD0280_FONT_32_CHAR_WIDTH;
-            ch_height = ATK_MD0280_FONT_32_CHAR_HEIGHT;
-            ch_size = ATK_MD0280_FONT_32_CHAR_SIZE;
-            break;
-        }
-#endif
-        default:
-        {
-            return;
-        }
+    case ATK_MD0280_LCD_FONT_32:
+    {
+        ch_code = atk_md0280_font_3216[ch_offset];
+        ch_width = ATK_MD0280_FONT_32_CHAR_WIDTH;
+        ch_height = ATK_MD0280_FONT_32_CHAR_HEIGHT;
+        ch_size = ATK_MD0280_FONT_32_CHAR_SIZE;
+        break;
     }
-    
+#endif
+    default:
+    {
+        return;
+    }
+    }
+
     if ((x + ch_width > ATK_MD0280_LCD_WIDTH) || (y + ch_height > ATK_MD0280_LCD_HEIGHT))
     {
         return;
     }
-    
-    for (byte_index=0; byte_index<ch_size; byte_index++)
+
+    for (byte_index = 0; byte_index < ch_size; byte_index++)
     {
         byte_code = ch_code[byte_index];
-        for (bit_index=0; bit_index<8; bit_index++)
+        for (bit_index = 0; bit_index < 8; bit_index++)
         {
             if ((byte_code & 0x80) != 0)
             {
@@ -1007,52 +1008,52 @@ void atk_md0280_show_string(uint16_t x, uint16_t y, uint16_t width, uint16_t hei
     uint16_t y_raw;
     uint16_t x_limit;
     uint16_t y_limit;
-    
+
     switch (font)
     {
 #if (ATK_MD0280_FONT_12 != 0)
-        case ATK_MD0280_LCD_FONT_12:
-        {
-            ch_width = ATK_MD0280_FONT_12_CHAR_WIDTH;
-            ch_height = ATK_MD0280_FONT_12_CHAR_HEIGHT;
-            break;
-        }
+    case ATK_MD0280_LCD_FONT_12:
+    {
+        ch_width = ATK_MD0280_FONT_12_CHAR_WIDTH;
+        ch_height = ATK_MD0280_FONT_12_CHAR_HEIGHT;
+        break;
+    }
 #endif
 #if (ATK_MD0280_FONT_16 != 0)
-        case ATK_MD0280_LCD_FONT_16:
-        {
-            ch_width = ATK_MD0280_FONT_16_CHAR_WIDTH;
-            ch_height = ATK_MD0280_FONT_16_CHAR_HEIGHT;
-            break;
-        }
+    case ATK_MD0280_LCD_FONT_16:
+    {
+        ch_width = ATK_MD0280_FONT_16_CHAR_WIDTH;
+        ch_height = ATK_MD0280_FONT_16_CHAR_HEIGHT;
+        break;
+    }
 #endif
 #if (ATK_MD0280_FONT_24 != 0)
-        case ATK_MD0280_LCD_FONT_24:
-        {
-            ch_width = ATK_MD0280_FONT_24_CHAR_WIDTH;
-            ch_height = ATK_MD0280_FONT_24_CHAR_HEIGHT;
-            break;
-        }
+    case ATK_MD0280_LCD_FONT_24:
+    {
+        ch_width = ATK_MD0280_FONT_24_CHAR_WIDTH;
+        ch_height = ATK_MD0280_FONT_24_CHAR_HEIGHT;
+        break;
+    }
 #endif
 #if (ATK_MD0280_FONT_32 != 0)
-        case ATK_MD0280_LCD_FONT_32:
-        {
-            ch_width = ATK_MD0280_FONT_32_CHAR_WIDTH;
-            ch_height = ATK_MD0280_FONT_32_CHAR_HEIGHT;
-            break;
-        }
-#endif
-        default:
-        {
-            return;
-        }
+    case ATK_MD0280_LCD_FONT_32:
+    {
+        ch_width = ATK_MD0280_FONT_32_CHAR_WIDTH;
+        ch_height = ATK_MD0280_FONT_32_CHAR_HEIGHT;
+        break;
     }
-    
+#endif
+    default:
+    {
+        return;
+    }
+    }
+
     x_raw = x;
     y_raw = y;
     x_limit = ((x + width + 1) > ATK_MD0280_LCD_WIDTH) ? ATK_MD0280_LCD_WIDTH : (x + width + 1);
     y_limit = ((y + height + 1) > ATK_MD0280_LCD_HEIGHT) ? ATK_MD0280_LCD_HEIGHT : (y + height + 1);
-    
+
     while ((*str >= ' ') && (*str <= '~'))
     {
         if (x + ch_width >= x_limit)
@@ -1060,15 +1061,15 @@ void atk_md0280_show_string(uint16_t x, uint16_t y, uint16_t width, uint16_t hei
             x = x_raw;
             y += ch_height;
         }
-        
+
         if (y + ch_height >= y_limit)
         {
             y = x_raw;
             x = y_raw;
         }
-        
+
         atk_md0280_show_char(x, y, *str, font, color);
-        
+
         x += ch_width;
         str++;
     }
@@ -1093,62 +1094,62 @@ void atk_md0280_show_xnum(uint16_t x, uint16_t y, uint32_t num, uint8_t len, atk
     uint8_t num_index;
     uint8_t first_nozero = 0;
     char pad;
-    
+
     switch (font)
     {
 #if (ATK_MD0280_FONT_12 != 0)
-        case ATK_MD0280_LCD_FONT_12:
-        {
-            ch_width = ATK_MD0280_FONT_12_CHAR_WIDTH;
-            break;
-        }
+    case ATK_MD0280_LCD_FONT_12:
+    {
+        ch_width = ATK_MD0280_FONT_12_CHAR_WIDTH;
+        break;
+    }
 #endif
 #if (ATK_MD0280_FONT_16 != 0)
-        case ATK_MD0280_LCD_FONT_16:
-        {
-            ch_width = ATK_MD0280_FONT_16_CHAR_WIDTH;
-            break;
-        }
+    case ATK_MD0280_LCD_FONT_16:
+    {
+        ch_width = ATK_MD0280_FONT_16_CHAR_WIDTH;
+        break;
+    }
 #endif
 #if (ATK_MD0280_FONT_24 != 0)
-        case ATK_MD0280_LCD_FONT_24:
-        {
-            ch_width = ATK_MD0280_FONT_24_CHAR_WIDTH;
-            break;
-        }
+    case ATK_MD0280_LCD_FONT_24:
+    {
+        ch_width = ATK_MD0280_FONT_24_CHAR_WIDTH;
+        break;
+    }
 #endif
 #if (ATK_MD0280_FONT_32 != 0)
-        case ATK_MD0280_LCD_FONT_32:
-        {
-            ch_width = ATK_MD0280_FONT_32_CHAR_WIDTH;
-            break;
-        }
-#endif
-        default:
-        {
-            return;
-        }
+    case ATK_MD0280_LCD_FONT_32:
+    {
+        ch_width = ATK_MD0280_FONT_32_CHAR_WIDTH;
+        break;
     }
-    
+#endif
+    default:
+    {
+        return;
+    }
+    }
+
     switch (mode)
     {
-        case ATK_MD0280_NUM_SHOW_NOZERO:
-        {
-            pad = ' ';
-            break;
-        }
-        case ATK_MD0280_NUM_SHOW_ZERO:
-        {
-            pad = '0';
-            break;
-        }
-        default:
-        {
-            return;
-        }
+    case ATK_MD0280_NUM_SHOW_NOZERO:
+    {
+        pad = ' ';
+        break;
     }
-    
-    for (len_index=0; len_index<len; len_index++)
+    case ATK_MD0280_NUM_SHOW_ZERO:
+    {
+        pad = '0';
+        break;
+    }
+    default:
+    {
+        return;
+    }
+    }
+
+    for (len_index = 0; len_index < len; len_index++)
     {
         num_index = (num / atk_md0280_pow(10, len - len_index - 1)) % 10;
         if ((first_nozero == 0) && (len_index < (len - 1)))
@@ -1163,7 +1164,7 @@ void atk_md0280_show_xnum(uint16_t x, uint16_t y, uint32_t num, uint8_t len, atk
                 first_nozero = 1;
             }
         }
-        
+
         atk_md0280_show_char(x + ch_width * len_index, y, num_index + '0', font, color);
     }
 }
@@ -1198,18 +1199,18 @@ void atk_md0280_show_pic(uint16_t x, uint16_t y, uint16_t width, uint16_t height
     uint16_t x_index;
     uint16_t y_index;
     uint8_t *pic_tmp = pic;
-    
+
     if ((x + width > ATK_MD0280_LCD_WIDTH) || (y + height > ATK_MD0280_LCD_HEIGHT))
     {
         return;
     }
-    
+
     atk_md0280_set_column_address(x, x + width - 1);
     atk_md0280_set_page_address(y, y + height - 1);
     atk_md0280_start_write_memory();
-    for (y_index=y; y_index<(y + height); y_index++)
+    for (y_index = y; y_index < (y + height); y_index++)
     {
-        for (x_index=x; x_index<(x + width); x_index++)
+        for (x_index = x; x_index < (x + width); x_index++)
         {
             uint16_t rgb_temp = *pic_tmp;
             pic_tmp++;
@@ -1226,56 +1227,57 @@ void atk_md0280_show_pic(uint16_t x, uint16_t y, uint16_t width, uint16_t height
  * @param       x     : 数字
  * @retval      16位连续变化RGB565
  */
-uint16_t linear_to_rgb565(uint16_t linear_value) {
-    uint8_t r,g,b;
+uint16_t linear_to_rgb565(uint16_t linear_value)
+{
+    uint8_t r, g, b;
     uint16_t rgb;
 
     // 平滑映射到RGB565格式
-    if (linear_value <= 1*31)
+    if (linear_value <= 1 * 31)
     {
-        r=0;
-        g=0;
-        b=linear_value - 0*31;
+        r = 0;
+        g = 0;
+        b = linear_value - 0 * 31;
     }
-    else if (linear_value <= 2*31)
+    else if (linear_value <= 2 * 31)
     {
-        r=0;
-        g=linear_value - 1*31;
-        b=31;
+        r = 0;
+        g = linear_value - 1 * 31;
+        b = 31;
     }
-    else if (linear_value <= 3*31)
+    else if (linear_value <= 3 * 31)
     {
-        r=0;
-        g=31;
-        b=3*31 - linear_value;
+        r = 0;
+        g = 31;
+        b = 3 * 31 - linear_value;
     }
-    else if (linear_value <= 4*31)
+    else if (linear_value <= 4 * 31)
     {
-        r=linear_value - 3*31;
-        g=31;
-        b=0;
+        r = linear_value - 3 * 31;
+        g = 31;
+        b = 0;
     }
-    else if (linear_value <= 5*31)
+    else if (linear_value <= 5 * 31)
     {
-        r=31;
-        g=5*31 - linear_value;
-        b=0;
+        r = 31;
+        g = 5 * 31 - linear_value;
+        b = 0;
     }
-    else if (linear_value <= 6*31)
+    else if (linear_value <= 6 * 31)
     {
-        r=31;
-        g=0;
-        b=linear_value - 5*31;
+        r = 31;
+        g = 0;
+        b = linear_value - 5 * 31;
     }
-    else if (linear_value <= 7*31)
+    else if (linear_value <= 7 * 31)
     {
-        r=31;
-        g=linear_value - 6*31;
-        b=31;
+        r = 31;
+        g = linear_value - 6 * 31;
+        b = 31;
     }
-    r=r&0x1F;
-    g=g&0x1F;
-    b=b&0x1F;
+    r = r & 0x1F;
+    g = g & 0x1F;
+    b = b & 0x1F;
 
     g = g << 1;
 
@@ -1283,32 +1285,31 @@ uint16_t linear_to_rgb565(uint16_t linear_value) {
     return rgb;
 }
 
-
 /**
  * @brief       把echo_use[16][256]显示出来
  * @param       x：显示的起始x坐标
  * @param       y：显示的起始y坐标
  * @retval      无
  */
-//echo_use[i][j]中，i的范围是0-15，j的范围是0-255
+// echo_use[i][j]中，i的范围是0-15，j的范围是0-255
 void atk_md0280_show_core(uint16_t x, uint16_t y)
 {
     uint16_t x_index;
     uint16_t y_index;
     int i;
-    i=8;
-    atk_md0280_set_column_address(x, x + i*16 - 1);
+    i = 8;
+    atk_md0280_set_column_address(x, x + i * 16 - 1);
     atk_md0280_set_page_address(y, y + 256 - 1);
     atk_md0280_start_write_memory();
-    for (y_index=y; y_index<(y + 256); y_index++)
+    for (y_index = y; y_index < (y + 256); y_index++)
     {
-        for (x_index=x; x_index<(x + 16); x_index++)
+        for (x_index = x; x_index < (x + 16); x_index++)
         {
             int i_tmp;
             i_tmp = i;
-            uint16_t pic_temp = (uint16_t)echo_use[x_index-x][y_index-y];
+            uint16_t pic_temp = (uint16_t)echo_use[x_index - x][y_index - y];
             uint16_t rgb_temp = linear_to_rgb565(pic_temp);
-            while(i_tmp>0)
+            while (i_tmp > 0)
             {
                 atk_md0280_fsmc_write_dat(rgb_temp);
                 i_tmp--;
