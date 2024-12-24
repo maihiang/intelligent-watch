@@ -236,8 +236,6 @@ void display_CORE(void)
         process_CSA1();
         t++;
     }
-    // 此时跑完后，echo_use[16][512]中存储的就是计算完成的结果
-    // todo：把echo_use显示出来
     atk_md0280_show_core(70, 30);
 }
 
