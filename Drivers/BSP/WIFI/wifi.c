@@ -8,10 +8,10 @@
 #include "./SYSTEM/delay/delay.h"
 
 // 定义WIFI的SSID，密码，TCP服务器的IP和端口
-#define DEMO_WIFI_SSID "MH160"
-#define DEMO_WIFI_PWD "88888898"
-#define DEMO_TCP_SERVER_IP "172.20.10.5"
-#define DEMO_TCP_SERVER_PORT "8008"
+#define DEMO_WIFI_SSID "LCH"
+#define DEMO_WIFI_PWD "LI,cai,hou,1105"
+#define DEMO_TCP_SERVER_IP "192.168.43.159"
+#define DEMO_TCP_SERVER_PORT "8080"
 
 // 声明display_WIFI函数中需要的函数
 static void demo_key0_fun(uint8_t is_unvarnished);
@@ -70,9 +70,10 @@ void display_WIFI(void)
         if (ret != 0)
         {
             printf("Error to join ap!\r\n");
+            atk_md0280_clear(ATK_MD0280_WHITE);
             while (1)
             {
-                atk_md0280_show_string(30, 130, ATK_MD0280_LCD_WIDTH, 24, "Fail to join ap", ATK_MD0280_LCD_FONT_24, ATK_MD0280_WHITE);
+                atk_md0280_show_string(30, 130, ATK_MD0280_LCD_WIDTH, 24, "Fail to join ap", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
                 LED0_TOGGLE();
                 delay_ms(200);
             }
@@ -85,9 +86,10 @@ void display_WIFI(void)
         if (ret != 0)
         {
             printf("Error to connect TCP server!\r\n");
+            atk_md0280_clear(ATK_MD0280_WHITE);
             while (1)
             {
-                atk_md0280_show_string(30, 130, ATK_MD0280_LCD_WIDTH, 24, "Fail to connect TCP server", ATK_MD0280_LCD_FONT_24, ATK_MD0280_WHITE);
+                atk_md0280_show_string(30, 130, ATK_MD0280_LCD_WIDTH, 24, "Fail to connect TCP server", ATK_MD0280_LCD_FONT_24, ATK_MD0280_BLACK);
                 LED0_TOGGLE();
                 delay_ms(200);
             }
